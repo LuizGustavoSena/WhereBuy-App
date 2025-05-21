@@ -17,7 +17,7 @@ export default class AuthService implements IAuth {
         });
 
         if (user.statusCode === HttpStatusCode.Created)
-            return { token: user.body };
+            return { token: user.body.token };
 
         throw new InvalidCredentialsError();
     }
