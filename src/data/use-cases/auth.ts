@@ -1,4 +1,4 @@
-import { InvalidCredentialsError } from "@src/domain/errors/invalid-credentials";
+import { ServerError } from "@src/domain/errors/server-error";
 import { SigninParams, SigninResponse, SignupParams } from "@src/domain/models/auth";
 import { IAuth } from "@src/domain/use-cases/auth";
 import { env } from "@src/infrastructure/env";
@@ -10,16 +10,16 @@ export default class AuthService implements IAuth {
     ) { };
 
     signin = async (params: SigninParams): Promise<SigninResponse> => {
-        const user = await this.httpClient.request({
+        const response = await this.httpClient.request({
             method: 'post',
             url: `${env.URL_AUTH}/login_account`,
             body: params
         });
 
-        if (user.statusCode === HttpStatusCode.Created)
-            return { token: user.body.token };
+        if (response.statusCode === HttpStatusCode.Created)
+            return { token: response.body.token };
 
-        throw new InvalidCredentialsError();
+        throw new ServerError(response.body.error);
     }
 
     signup = async (params: SignupParams): Promise<boolean> => {
@@ -30,7 +30,7 @@ export default class AuthService implements IAuth {
         });
 
         if (response.statusCode !== HttpStatusCode.Created)
-            throw new InvalidCredentialsError();
+            throw new ServerError(response.body.error);
 
         return true;
     }
