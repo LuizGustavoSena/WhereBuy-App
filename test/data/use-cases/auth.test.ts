@@ -35,10 +35,10 @@ describe('AuthService', () => {
         expect(response.token).not.toBeUndefined();
     });
 
-    it('Should be error when statusCode is differents to created', async () => {
+    it('Should be error when statusCode is differents to created in signin', async () => {
         const { sut, httpClient } = makeSut();
 
-        const error = { message: 'Error when create user' };
+        const error = { message: 'Error when authenticate user' };
 
         httpClient.response = {
             statusCode: makeHttpStatusCodeWithoutCreated(),
@@ -61,5 +61,20 @@ describe('AuthService', () => {
         const response = await sut.signup(makeSignupRequest());
 
         expect(response).toBeTruthy();
+    });
+
+    it('Should be error when statusCode is differents to created in signup', async () => {
+        const { sut, httpClient } = makeSut();
+
+        const error = { message: 'Error when create user' };
+
+        httpClient.response = {
+            statusCode: makeHttpStatusCodeWithoutCreated(),
+            body: error
+        };
+
+        const promise = sut.signup(makeSignupRequest());
+
+        await expect(promise).rejects.toThrow(new ServerError(error.message));
     });
 });
