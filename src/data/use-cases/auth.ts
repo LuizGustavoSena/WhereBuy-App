@@ -19,7 +19,7 @@ export default class AuthService implements IAuth {
         if (response.statusCode === HttpStatusCode.Created)
             return { token: response.body.token };
 
-        throw new ServerError(response.body.error);
+        throw new ServerError(response.body.message);
     }
 
     signup = async (params: SignupParams): Promise<boolean> => {
@@ -30,7 +30,7 @@ export default class AuthService implements IAuth {
         });
 
         if (response.statusCode !== HttpStatusCode.Created)
-            throw new ServerError(response.body.error);
+            throw new ServerError(response.body.message);
 
         return true;
     }
