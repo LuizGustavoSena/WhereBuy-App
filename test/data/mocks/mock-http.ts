@@ -1,4 +1,15 @@
+import { faker } from "@faker-js/faker";
 import { HttpRequest, HttpResponse, HttpStatusCode, IHttpClient } from "@src/data/protocols/http/http-client";
+
+export const makeHttpStatusCodeWithoutCreated = (): HttpStatusCode => {
+    var statusCode;
+
+    do {
+        statusCode = faker.helpers.enumValue(HttpStatusCode);
+    } while (statusCode === HttpStatusCode.Created);
+
+    return statusCode;
+}
 
 export class HttpClientSpy implements IHttpClient {
     url?: string;
