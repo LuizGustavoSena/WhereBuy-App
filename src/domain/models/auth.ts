@@ -6,3 +6,9 @@ export type SigninParams = {
 export type SigninResponse = {
     token: string;
 }
+
+export type SignupParams = {
+    email: string;
+    password: string;
+    name: string;
+}
