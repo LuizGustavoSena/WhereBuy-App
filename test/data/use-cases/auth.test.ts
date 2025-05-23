@@ -1,6 +1,6 @@
 import { HttpStatusCode } from "@src/data/protocols/http/http-client";
 import AuthService from "@src/data/use-cases/auth";
-import { InvalidCredentialsError } from "@src/domain/errors/invalid-credentials";
+import { ServerError } from "@src/domain/errors/server-error";
 import { makeSigninRequest, makeSigninResponse, makeSignupRequest } from "@test/domain/mocks/mock-auth";
 import { describe, expect, it } from "vitest";
 import { HttpClientSpy, makeHttpStatusCodeWithoutCreated } from "../mocks/mock-http";
@@ -38,13 +38,16 @@ describe('AuthService', () => {
     it('Should be error when statusCode is differents to created', async () => {
         const { sut, httpClient } = makeSut();
 
+        const error = { message: 'Error when create user' };
+
         httpClient.response = {
-            statusCode: makeHttpStatusCodeWithoutCreated()
+            statusCode: makeHttpStatusCodeWithoutCreated(),
+            body: error
         };
 
         const promise = sut.signin(makeSigninRequest());
 
-        await expect(promise).rejects.toThrow(new InvalidCredentialsError());
+        await expect(promise).rejects.toThrow(new ServerError(error.message));
     });
 
     it('Should be successful to signup authentication', async () => {
