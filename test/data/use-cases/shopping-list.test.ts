@@ -1,6 +1,8 @@
-import { describe } from "vitest";
-import { HttpClientSpy } from "../mocks/mock-http";
-import { ShoppingListService } from "./shopping-list";
+import { HttpStatusCode } from "@src/data/protocols/http/http-client";
+import { ShoppingListService } from "@src/data/use-cases/shopping-list";
+import { HttpClientSpy } from "@test/data/mocks/mock-http";
+import { makeShoppingListCreate } from "@test/domain/mocks/mock-shopping-list";
+import { describe, expect, it } from "vitest";
 
 type Props = {
     httpClient: HttpClientSpy;
@@ -18,5 +20,18 @@ const makeSut = (): Props => {
 }
 
 describe('ShoppingListService', () => {
+    it('Should be correct verbs in httpClient', async () => {
+        const { httpClient, sut } = makeSut();
 
+        httpClient.response.statusCode = HttpStatusCode.Created
+
+        const request = makeShoppingListCreate()
+
+        await sut.create(request);
+
+        expect(httpClient.method).toBe('post');
+        expect(httpClient.url).not.toBeNull();
+        expect(httpClient.url).not.toBeUndefined();
+        expect(httpClient.body).toEqual(request);
+    })
 });
