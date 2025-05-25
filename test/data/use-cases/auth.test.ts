@@ -1,3 +1,4 @@
+import { faker } from "@faker-js/faker";
 import { HttpStatusCode } from "@src/data/protocols/http/http-client";
 import AuthService from "@src/data/use-cases/auth";
 import { ServerError } from "@src/domain/errors/server-error";
@@ -21,6 +22,24 @@ const makeSut = (): Props => {
 }
 
 describe('AuthService', () => {
+    it('Should be correct verbs in httpClient', async () => {
+        const { sut, httpClient } = makeSut();
+
+        httpClient.response = {
+            statusCode: HttpStatusCode.Created,
+            body: { token: faker.internet.jwt() }
+        };
+
+        const request = makeSigninRequest();
+
+        await sut.signin(request);
+
+        expect(httpClient.method).toBe('post');
+        expect(httpClient.url).not.toBeNull();
+        expect(httpClient.url).not.toBeUndefined();
+        expect(httpClient.body).toEqual(request);
+    });
+
     it('Should be successful to signin authentication', async () => {
         const { sut, httpClient } = makeSut();
 
