@@ -2,7 +2,8 @@ import { InvalidEnvError } from "@src/domain/errors/invalid-env";
 import { z } from "zod";
 
 const envSchema = z.object({
-    URL_AUTH: z.string()
+    URL_AUTH: z.string(),
+    URL_SHOPPING_LIST: z.string()
 });
 
 const _env = envSchema.safeParse(process.env);
