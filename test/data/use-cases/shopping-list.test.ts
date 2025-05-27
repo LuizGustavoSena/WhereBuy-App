@@ -66,4 +66,14 @@ describe('ShoppingListService', () => {
 
         await expect(promise).rejects.toThrow(new ServerError(error.message));
     });
+
+    it('Should be correct verbs when call getAll in httpClient', async () => {
+        const { httpClient, sut } = makeSut();
+
+        await sut.getAll();
+
+        expect(httpClient.method).toBe('get');
+        expect(httpClient.url).not.toBeNull();
+        expect(httpClient.url).not.toBeUndefined();
+    });
 });
