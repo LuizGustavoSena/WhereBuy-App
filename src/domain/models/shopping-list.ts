@@ -10,6 +10,8 @@ export type ShoppingList = {
 export type CreateShoppingListProps = Omit<ShoppingList, 'id' | 'created'>;
 export type CreateShoppingListResponse = { id: string };
 
+export type GetAllShoppingListResult = Omit<ShoppingList, 'userId'>[];
+
 export enum TypeAmountEnum {
     UNIT = 'unit',
     GRAMS = 'grams',
