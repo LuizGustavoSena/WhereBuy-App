@@ -1,7 +1,8 @@
 import { faker } from "@faker-js/faker";
 import { HttpStatusCode } from "@src/data/protocols/http/http-client";
 import { ShoppingListService } from "@src/data/use-cases/shopping-list";
-import { HttpClientSpy } from "@test/data/mocks/mock-http";
+import { ServerError } from "@src/domain/errors/server-error";
+import { HttpClientSpy, makeHttpStatusCodeWithoutCreated } from "@test/data/mocks/mock-http";
 import { makeShoppingListCreate } from "@test/domain/mocks/mock-shopping-list";
 import { describe, expect, it } from "vitest";
 
@@ -21,7 +22,7 @@ const makeSut = (): Props => {
 }
 
 describe('ShoppingListService', () => {
-    it('Should be correct verbs in httpClient', async () => {
+    it('Should be correct verbs when call create in httpClient', async () => {
         const { httpClient, sut } = makeSut();
 
         httpClient.response.statusCode = HttpStatusCode.Created
@@ -49,5 +50,20 @@ describe('ShoppingListService', () => {
         const response = await sut.create(makeShoppingListCreate());
 
         expect(response.id).toBe(id);
+    });
+
+    it('Should be error when create shopping list item', async () => {
+        const { httpClient, sut } = makeSut();
+
+        const error = { message: 'Error when create shopping list item' };
+
+        httpClient.response = {
+            statusCode: makeHttpStatusCodeWithoutCreated(),
+            body: error
+        };
+
+        const promise = sut.create(makeShoppingListCreate());
+
+        await expect(promise).rejects.toThrow(new ServerError(error.message));
     });
 });
