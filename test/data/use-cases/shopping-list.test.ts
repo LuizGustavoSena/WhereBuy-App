@@ -2,7 +2,7 @@ import { faker } from "@faker-js/faker";
 import { HttpStatusCode } from "@src/data/protocols/http/http-client";
 import { ShoppingListService } from "@src/data/use-cases/shopping-list";
 import { ServerError } from "@src/domain/errors/server-error";
-import { HttpClientSpy, makeHttpStatusCodeWithoutCreated } from "@test/data/mocks/mock-http";
+import { HttpClientSpy, makeHttpStatusCodeWithoutCreated, makeHttpStatusCodeWithoutCreatedAndOk } from "@test/data/mocks/mock-http";
 import { makeShoppingListCreate, makeShoppingListItem } from "@test/domain/mocks/mock-shopping-list";
 import { describe, expect, it } from "vitest";
 
@@ -104,5 +104,20 @@ describe('ShoppingListService', () => {
 
         expect(response).toHaveLength(1);
         expect(response[0]).toEqual(shoppingItem);
+    });
+
+    it('Should be error when getAll shopping list items', async () => {
+        const { httpClient, sut } = makeSut();
+
+        const error = { message: 'Error when create shopping list item' };
+
+        httpClient.response = {
+            statusCode: makeHttpStatusCodeWithoutCreatedAndOk(),
+            body: error
+        };
+
+        const promise = sut.getAll();
+
+        await expect(promise).rejects.toThrow(new ServerError(error.message));
     });
 });
