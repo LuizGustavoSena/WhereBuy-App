@@ -120,4 +120,17 @@ describe('ShoppingListService', () => {
 
         await expect(promise).rejects.toThrow(new ServerError(error.message));
     });
+
+    it('Should be correct verbs when call getByName in httpClient', async () => {
+        const { httpClient, sut } = makeSut();
+
+        const name = faker.commerce.productName();
+
+        await sut.getByName(name);
+
+        expect(httpClient.method).toBe('get');
+        expect(httpClient.url).not.toBeNull();
+        expect(httpClient.url).not.toBeUndefined();
+        expect(httpClient.url).includes(`name=${name}`);
+    });
 });
