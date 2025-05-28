@@ -133,4 +133,20 @@ describe('ShoppingListService', () => {
         expect(httpClient.url).not.toBeUndefined();
         expect(httpClient.url).includes(`name=${name}`);
     });
+
+    it('Should be successful getByName', async () => {
+        const { httpClient, sut } = makeSut();
+
+        const shoppingItem = makeShoppingListItem();
+
+        httpClient.response = {
+            statusCode: HttpStatusCode.Ok,
+            body: [shoppingItem]
+        };
+
+        const response = await sut.getByName(faker.commerce.productName());
+
+        expect(response).toHaveLength(1);
+        expect(response[0]).toEqual(shoppingItem);
+    });
 });
