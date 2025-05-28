@@ -11,6 +11,16 @@ export const makeHttpStatusCodeWithoutCreated = (): HttpStatusCode => {
     return statusCode;
 }
 
+export const makeHttpStatusCodeWithoutCreatedAndOk = (): HttpStatusCode => {
+    var statusCode;
+
+    do {
+        statusCode = faker.helpers.enumValue(HttpStatusCode);
+    } while (statusCode === HttpStatusCode.Created || statusCode === HttpStatusCode.Ok);
+
+    return statusCode;
+}
+
 export class HttpClientSpy implements IHttpClient {
     url?: string;
     method?: string;
