@@ -1,5 +1,5 @@
 import { ServerError } from "@src/domain/errors/server-error";
-import { CreateShoppingListProps, CreateShoppingListResponse, GetAllShoppingListResult } from "@src/domain/models/shopping-list";
+import { CreateShoppingListProps, CreateShoppingListResponse, GetAllShoppingListResult, GetByNameShoppingListResult } from "@src/domain/models/shopping-list";
 import { IShoppingList } from "@src/domain/use-cases/shopping-list";
 import { env } from "@src/infrastructure/env";
 import { HttpStatusCode, IHttpClient } from "../protocols/http/http-client";
@@ -32,5 +32,17 @@ export class ShoppingListService implements IShoppingList {
             throw new ServerError(response.body.message);
 
         return response.body;
-    }
+    };
+
+    getByName = async (name: string): Promise<GetByNameShoppingListResult> => {
+        const response = await this.httpClient.request({
+            method: 'get',
+            url: `${env.URL_SHOPPING_LIST}?name=${name}`,
+        });
+
+        if (response.statusCode !== HttpStatusCode.Ok && response.statusCode !== HttpStatusCode.NoContent)
+            throw new ServerError(response.body.message);
+
+        return response.body;
+    };
 }
