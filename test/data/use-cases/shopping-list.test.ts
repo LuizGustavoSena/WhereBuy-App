@@ -3,7 +3,7 @@ import { HttpStatusCode } from "@src/data/protocols/http/http-client";
 import { ShoppingListService } from "@src/data/use-cases/shopping-list";
 import { ServerError } from "@src/domain/errors/server-error";
 import { HttpClientSpy, makeHttpStatusCodeWithoutCreated } from "@test/data/mocks/mock-http";
-import { makeShoppingListCreate } from "@test/domain/mocks/mock-shopping-list";
+import { makeShoppingListCreate, makeShoppingListItem } from "@test/domain/mocks/mock-shopping-list";
 import { describe, expect, it } from "vitest";
 
 type Props = {
@@ -88,5 +88,21 @@ describe('ShoppingListService', () => {
         const response = await sut.getAll();
 
         expect(response).toHaveLength(0);
+    });
+
+    it('Should be successful getAll', async () => {
+        const { httpClient, sut } = makeSut();
+
+        const shoppingItem = makeShoppingListItem();
+
+        httpClient.response = {
+            statusCode: HttpStatusCode.Ok,
+            body: [shoppingItem]
+        };
+
+        const response = await sut.getAll();
+
+        expect(response).toHaveLength(1);
+        expect(response[0]).toEqual(shoppingItem);
     });
 });
