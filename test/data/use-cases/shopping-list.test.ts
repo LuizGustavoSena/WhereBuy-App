@@ -76,4 +76,17 @@ describe('ShoppingListService', () => {
         expect(httpClient.url).not.toBeNull();
         expect(httpClient.url).not.toBeUndefined();
     });
+
+    it('Should be successful getAll return a empty list', async () => {
+        const { httpClient, sut } = makeSut();
+
+        httpClient.response = {
+            statusCode: HttpStatusCode.NoContent,
+            body: []
+        };
+
+        const response = await sut.getAll();
+
+        expect(response).toHaveLength(0);
+    });
 });
