@@ -149,4 +149,19 @@ describe('ShoppingListService', () => {
         expect(response).toHaveLength(1);
         expect(response[0]).toEqual(shoppingItem);
     });
+
+    it('Should be error when getByName shopping list items', async () => {
+        const { httpClient, sut } = makeSut();
+
+        const error = { message: 'Error when create shopping list item' };
+
+        httpClient.response = {
+            statusCode: makeHttpStatusCodeWithoutCreatedAndOk(),
+            body: error
+        };
+
+        const promise = sut.getByName(faker.commerce.productName());
+
+        await expect(promise).rejects.toThrow(new ServerError(error.message));
+    });
 });
