@@ -1,5 +1,5 @@
 import { ServerError } from "@src/domain/errors/server-error";
-import { CreateShoppingListProps, CreateShoppingListResponse, GetAllShoppingListResult, GetByNameShoppingListResult } from "@src/domain/models/shopping-list";
+import { CreateShoppingListProps, CreateShoppingListResponse, GetAllShoppingListResult, GetByNameShoppingListResult, UpdateShoppingListProps, UpdateShoppingListResult } from "@src/domain/models/shopping-list";
 import { IShoppingList } from "@src/domain/use-cases/shopping-list";
 import { env } from "@src/infrastructure/env";
 import { HttpStatusCode, IHttpClient } from "../protocols/http/http-client";
@@ -45,4 +45,17 @@ export class ShoppingListService implements IShoppingList {
 
         return response.body;
     };
+
+    update = async ({ id, data }: UpdateShoppingListProps): Promise<UpdateShoppingListResult> => {
+        const response = await this.httpClient.request({
+            method: 'patch',
+            url: `${env.URL_SHOPPING_LIST}/${id}`,
+            body: data
+        });
+
+        if (response.statusCode !== HttpStatusCode.Ok)
+            throw new ServerError(response.body.message);
+
+        return response.body;
+    }
 }
