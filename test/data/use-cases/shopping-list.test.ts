@@ -3,7 +3,7 @@ import { HttpStatusCode } from "@src/data/protocols/http/http-client";
 import { ShoppingListService } from "@src/data/use-cases/shopping-list";
 import { ServerError } from "@src/domain/errors/server-error";
 import { HttpClientSpy, makeHttpStatusCodeWithoutCreated, makeHttpStatusCodeWithoutCreatedAndOk } from "@test/data/mocks/mock-http";
-import { makeShoppingListCreate, makeShoppingListItem } from "@test/domain/mocks/mock-shopping-list";
+import { makeShoppingListCreate, makeShoppingListItem, makeShoppingListUpdate } from "@test/domain/mocks/mock-shopping-list";
 import { describe, expect, it } from "vitest";
 
 type Props = {
@@ -163,5 +163,17 @@ describe('ShoppingListService', () => {
         const promise = sut.getByName(faker.commerce.productName());
 
         await expect(promise).rejects.toThrow(new ServerError(error.message));
+    });
+
+    it('Should be correct verbs when call update in httpClient', async () => {
+        const { httpClient, sut } = makeSut();
+
+        const request = makeShoppingListUpdate();
+
+        await sut.update(request);
+
+        expect(httpClient.method).toBe('patch');
+        expect(httpClient.url).includes(`/${request.id}`);
+        expect(httpClient.body).toEqual(request.data);
     });
 });
