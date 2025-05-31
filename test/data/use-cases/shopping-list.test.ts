@@ -191,4 +191,19 @@ describe('ShoppingListService', () => {
 
         expect(response).toEqual(shoppingItem);
     });
+
+    it('Should be error when update shopping list item', async () => {
+        const { httpClient, sut } = makeSut();
+
+        const error = { message: 'Error when update shopping list item' };
+
+        httpClient.response = {
+            statusCode: makeHttpStatusCodeWithoutCreated(),
+            body: error
+        };
+
+        const promise = sut.update(makeShoppingListUpdate());
+
+        await expect(promise).rejects.toThrow(new ServerError(error.message));
+    });
 });
