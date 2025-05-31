@@ -176,4 +176,19 @@ describe('ShoppingListService', () => {
         expect(httpClient.url).includes(`/${request.id}`);
         expect(httpClient.body).toEqual(request.data);
     });
+
+    it('Should be successful update', async () => {
+        const { httpClient, sut } = makeSut();
+
+        const shoppingItem = makeShoppingListItem();
+
+        httpClient.response = {
+            statusCode: HttpStatusCode.Ok,
+            body: shoppingItem
+        };
+
+        const response = await sut.update(makeShoppingListUpdate());
+
+        expect(response).toEqual(shoppingItem);
+    });
 });
