@@ -1,3 +1,4 @@
+import { ItemNotFoundError } from "@src/domain/errors/item-not-found-error";
 import { ServerError } from "@src/domain/errors/server-error";
 import { CreateShoppingListProps, CreateShoppingListResponse, GetAllShoppingListResult, GetByNameShoppingListResult, UpdateShoppingListProps, UpdateShoppingListResult } from "@src/domain/models/shopping-list";
 import { IShoppingList } from "@src/domain/use-cases/shopping-list";
@@ -52,6 +53,9 @@ export class ShoppingListService implements IShoppingList {
             url: `${env.URL_SHOPPING_LIST}/${id}`,
             body: data
         });
+
+        if (response.statusCode === HttpStatusCode.NotFound)
+            throw new ItemNotFoundError();
 
         if (response.statusCode !== HttpStatusCode.Ok)
             throw new ServerError(response.body.message);
