@@ -1,8 +1,9 @@
 import { faker } from "@faker-js/faker";
 import { HttpStatusCode } from "@src/data/protocols/http/http-client";
 import { ShoppingListService } from "@src/data/use-cases/shopping-list";
+import { ItemNotFoundError } from "@src/domain/errors/item-not-found-error";
 import { ServerError } from "@src/domain/errors/server-error";
-import { HttpClientSpy, makeHttpStatusCodeWithoutCreated, makeHttpStatusCodeWithoutCreatedAndOk } from "@test/data/mocks/mock-http";
+import { HttpClientSpy, makeHttpStatusCodeWithoutCreated, makeHttpStatusCodeWithoutCreatedAndOk, makeHttpStatusCodeWithoutOkAndNotFound } from "@test/data/mocks/mock-http";
 import { makeShoppingListCreate, makeShoppingListItem, makeShoppingListUpdate } from "@test/domain/mocks/mock-shopping-list";
 import { describe, expect, it } from "vitest";
 
@@ -192,18 +193,33 @@ describe('ShoppingListService', () => {
         expect(response).toEqual(shoppingItem);
     });
 
-    it('Should be error when update shopping list item', async () => {
+    it('Should be api error when update shopping list item', async () => {
         const { httpClient, sut } = makeSut();
 
         const error = { message: 'Error when update shopping list item' };
 
         httpClient.response = {
-            statusCode: makeHttpStatusCodeWithoutCreated(),
+            statusCode: makeHttpStatusCodeWithoutOkAndNotFound(),
             body: error
         };
 
         const promise = sut.update(makeShoppingListUpdate());
 
         await expect(promise).rejects.toThrow(new ServerError(error.message));
+    });
+
+    it('Should be error when update shopping list item non existent', async () => {
+        const { httpClient, sut } = makeSut();
+
+        const error = { message: 'Error when update shopping list item' };
+
+        httpClient.response = {
+            statusCode: HttpStatusCode.NotFound,
+            body: error
+        };
+
+        const promise = sut.update(makeShoppingListUpdate());
+
+        await expect(promise).rejects.toThrow(new ItemNotFoundError());
     });
 });
