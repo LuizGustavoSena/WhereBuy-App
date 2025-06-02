@@ -53,7 +53,7 @@ describe('ShoppingListService', () => {
         expect(response.id).toBe(id);
     });
 
-    it('Should be error when create shopping list item', async () => {
+    it('Should be api error when create shopping list item', async () => {
         const { httpClient, sut } = makeSut();
 
         const error = { message: 'Error when create shopping list item' };
@@ -107,7 +107,7 @@ describe('ShoppingListService', () => {
         expect(response[0]).toEqual(shoppingItem);
     });
 
-    it('Should be error when getAll shopping list items', async () => {
+    it('Should be api error when getAll shopping list items', async () => {
         const { httpClient, sut } = makeSut();
 
         const error = { message: 'Error when create shopping list item' };
@@ -151,7 +151,7 @@ describe('ShoppingListService', () => {
         expect(response[0]).toEqual(shoppingItem);
     });
 
-    it('Should be error when getByName shopping list items', async () => {
+    it('Should be api error when getByName shopping list items', async () => {
         const { httpClient, sut } = makeSut();
 
         const error = { message: 'Error when create shopping list item' };
@@ -221,5 +221,16 @@ describe('ShoppingListService', () => {
         const promise = sut.update(makeShoppingListUpdate());
 
         await expect(promise).rejects.toThrow(new ItemNotFoundError());
+    });
+
+    it('Should be correct verbs when call deleteById in httpClient', async () => {
+        const { httpClient, sut } = makeSut();
+
+        const id = faker.string.uuid();
+
+        await sut.deleteById(id);
+
+        expect(httpClient.method).toBe('delete');
+        expect(httpClient.url).includes(`/${id}`);
     });
 });
