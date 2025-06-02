@@ -233,4 +233,12 @@ describe('ShoppingListService', () => {
         expect(httpClient.method).toBe('delete');
         expect(httpClient.url).includes(`/${id}`);
     });
+
+    it('Should be successful deleteById', async () => {
+        const { sut } = makeSut();
+
+        const promise = sut.deleteById(faker.string.uuid());
+
+        await expect(promise).resolves.toBeUndefined();
+    });
 });
