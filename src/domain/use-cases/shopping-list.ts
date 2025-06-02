@@ -5,4 +5,5 @@ export interface IShoppingList {
     getAll(): Promise<GetAllShoppingListResult>;
     getByName(name: string): Promise<GetByNameShoppingListResult>;
     update(params: UpdateShoppingListProps): Promise<UpdateShoppingListResult>
+    deleteById(id: string): Promise<void>;
 }
