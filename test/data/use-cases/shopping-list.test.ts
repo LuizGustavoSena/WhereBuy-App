@@ -241,4 +241,19 @@ describe('ShoppingListService', () => {
 
         await expect(promise).resolves.toBeUndefined();
     });
+
+    it('Should be error when delete shopping list item non existent', async () => {
+        const { httpClient, sut } = makeSut();
+
+        const error = { message: 'Error when delete shopping list item' };
+
+        httpClient.response = {
+            statusCode: HttpStatusCode.NotFound,
+            body: error
+        };
+
+        const promise = sut.deleteById(faker.string.uuid());
+
+        await expect(promise).rejects.toThrow(new ItemNotFoundError());
+    });
 });
