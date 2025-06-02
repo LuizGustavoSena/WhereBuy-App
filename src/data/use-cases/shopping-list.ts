@@ -62,4 +62,17 @@ export class ShoppingListService implements IShoppingList {
 
         return response.body;
     }
+
+    deleteById = async (id: string): Promise<void> => {
+        const response = await this.httpClient.request({
+            method: 'delete',
+            url: `${env.URL_SHOPPING_LIST}/${id}`
+        });
+
+        if (response.statusCode === HttpStatusCode.NotFound)
+            throw new ItemNotFoundError();
+
+        if (response.statusCode !== HttpStatusCode.Ok)
+            throw new ServerError(response.body.message);
+    }
 }
