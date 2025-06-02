@@ -256,4 +256,19 @@ describe('ShoppingListService', () => {
 
         await expect(promise).rejects.toThrow(new ItemNotFoundError());
     });
+
+    it('Should be api error when delete shopping list item', async () => {
+        const { httpClient, sut } = makeSut();
+
+        const error = { message: 'Error when delete shopping list item' };
+
+        httpClient.response = {
+            statusCode: makeHttpStatusCodeWithoutOkAndNotFound(),
+            body: error
+        };
+
+        const promise = sut.deleteById(faker.string.uuid());
+
+        await expect(promise).rejects.toThrow(new ServerError(error.message));
+    });
 });
