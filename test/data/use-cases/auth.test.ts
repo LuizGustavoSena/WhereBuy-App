@@ -1,19 +1,19 @@
 import { faker } from "@faker-js/faker";
 import { HttpStatusCode } from "@src/data/protocols/http/http-client";
-import AuthService from "@src/data/use-cases/auth";
+import AuthUseCase from "@src/data/use-cases/auth";
 import { ServerError } from "@src/domain/errors/server-error";
 import { makeSigninRequest, makeSigninResponse, makeSignupRequest } from "@test/domain/mocks/mock-auth";
 import { describe, expect, it } from "vitest";
 import { HttpClientSpy, makeHttpStatusCodeWithoutCreated } from "../mocks/mock-http";
 
 type Props = {
-    sut: AuthService;
+    sut: AuthUseCase;
     httpClient: HttpClientSpy;
 }
 
 const makeSut = (): Props => {
     const httpClient = new HttpClientSpy();
-    const sut = new AuthService(httpClient);
+    const sut = new AuthUseCase(httpClient);
 
     return {
         sut,
@@ -21,8 +21,8 @@ const makeSut = (): Props => {
     }
 }
 
-describe('AuthService', () => {
-    it('Should be correct verbs in httpClient', async () => {
+describe('AuthUseCase', () => {
+    it('Should be correct verbs in signin httpClient', async () => {
         const { sut, httpClient } = makeSut();
 
         httpClient.response = {
@@ -54,7 +54,7 @@ describe('AuthService', () => {
         expect(response.token).not.toBeUndefined();
     });
 
-    it('Should be error when statusCode is differents to created in signin', async () => {
+    it('Should be api error in signin', async () => {
         const { sut, httpClient } = makeSut();
 
         const error = { message: 'Error when authenticate user' };
@@ -77,12 +77,12 @@ describe('AuthService', () => {
             body: makeSigninResponse()
         };
 
-        const response = await sut.signup(makeSignupRequest());
+        const promise = sut.signup(makeSignupRequest());
 
-        expect(response).toBeTruthy();
+        await expect(promise).resolves.toBeUndefined();
     });
 
-    it('Should be error when statusCode is differents to created in signup', async () => {
+    it('Should be api error in signup', async () => {
         const { sut, httpClient } = makeSut();
 
         const error = { message: 'Error when create user' };
