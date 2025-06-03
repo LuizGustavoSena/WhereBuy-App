@@ -5,7 +5,7 @@ import { IShoppingList } from "@src/domain/use-cases/shopping-list";
 import { env } from "@src/infrastructure/env";
 import { HttpStatusCode, IHttpClient } from "../protocols/http/http-client";
 
-export class ShoppingListService implements IShoppingList {
+export class ShoppingListUseCase implements IShoppingList {
     constructor(
         private httpClient: IHttpClient
     ) { };
