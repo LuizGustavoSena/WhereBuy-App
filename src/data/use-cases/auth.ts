@@ -4,7 +4,7 @@ import { IAuth } from "@src/domain/use-cases/auth";
 import { env } from "@src/infrastructure/env";
 import { HttpStatusCode, IHttpClient } from "../protocols/http/http-client";
 
-export default class AuthService implements IAuth {
+export default class AuthUseCase implements IAuth {
     constructor(
         private httpClient: IHttpClient
     ) { };
@@ -22,7 +22,7 @@ export default class AuthService implements IAuth {
         throw new ServerError(response.body.message);
     }
 
-    signup = async (params: SignupParams): Promise<boolean> => {
+    signup = async (params: SignupParams): Promise<void> => {
         const response = await this.httpClient.request({
             method: 'post',
             url: `${env.URL_AUTH}/create_account`,
@@ -31,7 +31,5 @@ export default class AuthService implements IAuth {
 
         if (response.statusCode !== HttpStatusCode.Created)
             throw new ServerError(response.body.message);
-
-        return true;
     }
 }
