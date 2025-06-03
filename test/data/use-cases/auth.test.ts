@@ -69,6 +69,24 @@ describe('AuthUseCase', () => {
         await expect(promise).rejects.toThrow(new ServerError(error.message));
     });
 
+    it('Should be correct verbs in signup httpClient', async () => {
+        const { sut, httpClient } = makeSut();
+
+        httpClient.response = {
+            statusCode: HttpStatusCode.Created,
+            body: { token: faker.internet.jwt() }
+        };
+
+        const request = makeSignupRequest();
+
+        await sut.signup(request);
+
+        expect(httpClient.method).toBe('post');
+        expect(httpClient.url).not.toBeNull();
+        expect(httpClient.url).not.toBeUndefined();
+        expect(httpClient.body).toEqual(request);
+    });
+
     it('Should be successful to signup authentication', async () => {
         const { sut, httpClient } = makeSut();
 
