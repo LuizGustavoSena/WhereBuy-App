@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker";
 import { HttpStatusCode } from "@src/data/protocols/http/http-client";
-import { ShoppingListService } from "@src/data/use-cases/shopping-list";
+import { ShoppingListUseCase } from "@src/data/use-cases/shopping-list";
 import { ItemNotFoundError } from "@src/domain/errors/item-not-found-error";
 import { ServerError } from "@src/domain/errors/server-error";
 import { HttpClientSpy, makeHttpStatusCodeWithoutCreated, makeHttpStatusCodeWithoutCreatedAndOk, makeHttpStatusCodeWithoutOkAndNotFound } from "@test/data/mocks/mock-http";
@@ -9,12 +9,12 @@ import { describe, expect, it } from "vitest";
 
 type Props = {
     httpClient: HttpClientSpy;
-    sut: ShoppingListService
+    sut: ShoppingListUseCase
 }
 
 const makeSut = (): Props => {
     const httpClient = new HttpClientSpy();
-    const sut = new ShoppingListService(httpClient);
+    const sut = new ShoppingListUseCase(httpClient);
 
     return {
         sut,
@@ -22,7 +22,7 @@ const makeSut = (): Props => {
     }
 }
 
-describe('ShoppingListService', () => {
+describe('ShoppingListUseCase', () => {
     it('Should be correct verbs when call create in httpClient', async () => {
         const { httpClient, sut } = makeSut();
 
