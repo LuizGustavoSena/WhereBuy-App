@@ -5,6 +5,6 @@ export type CreateCacheProps = {
 
 export interface ICacheClient {
     create(params: CreateCacheProps): void;
-    readByKey(key: string): any;
+    readByKey(key: string): any | null;
     delete(): void;
 }
