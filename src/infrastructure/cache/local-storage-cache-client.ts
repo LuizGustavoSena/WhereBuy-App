@@ -16,7 +16,7 @@ export class LocalStorageCacheClient implements ICacheClient {
         return JSON.parse(response);
     }
 
-    delete(): void {
-        throw new Error("Method not implemented.");
+    deleteByKey(key: string): void {
+        localStorage.removeItem(key);
     }
 }
