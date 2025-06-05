@@ -7,9 +7,15 @@ export class LocalStorageCacheClient implements ICacheClient {
         localStorage.setItem(key, body);
     }
 
-    readByKey(key: string) {
-        throw new Error("Method not implemented.");
+    readByKey(key: string): any | null {
+        const response = localStorage.getItem(key);
+
+        if (!response)
+            return null;
+
+        return JSON.parse(response);
     }
+
     delete(): void {
         throw new Error("Method not implemented.");
     }
