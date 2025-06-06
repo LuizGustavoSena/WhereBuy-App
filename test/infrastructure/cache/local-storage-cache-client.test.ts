@@ -22,4 +22,12 @@ describe('LocalStorageCacheClient', () => {
 
         expect(response).toEqual(request);
     });
+
+    it('Should be null when read a undefined key', () => {
+        const sut = makeSut();
+
+        const response = sut.readByKey(faker.string.sample());
+
+        expect(response).toBeNull();
+    });
 });
