@@ -30,4 +30,18 @@ describe('LocalStorageCacheClient', () => {
 
         expect(response).toBeNull();
     });
+
+    it('Should be remove storage by key', () => {
+        const sut = makeSut();
+
+        const keyName = faker.string.sample();
+
+        sut.create({ key: keyName, value: mockRequest() });
+
+        sut.deleteByKey(keyName);
+
+        const response = sut.readByKey(keyName)
+
+        expect(response).toBeNull();
+    });
 });
