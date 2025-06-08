@@ -33,17 +33,32 @@ describe('AuthorizeHttpClientDecorator', () => {
     });
 
     it('Should not add headers if GetStorage is invalid', async () => {
-        const { sut, httpClientSpy } = makeSut()
+        const { sut, httpClientSpy } = makeSut();
         const httpRequest = mockRequest();
 
         httpRequest.headers = {
             field: faker.string.sample()
         };
 
-        await sut.request(httpRequest)
+        await sut.request(httpRequest);
 
-        expect(httpClientSpy.url).toBe(httpRequest.url)
-        expect(httpClientSpy.method).toBe(httpRequest.method)
-        expect(httpClientSpy.headers).toEqual(httpRequest.headers)
+        expect(httpClientSpy.url).toBe(httpRequest.url);
+        expect(httpClientSpy.method).toBe(httpRequest.method);
+        expect(httpClientSpy.headers).toEqual(httpRequest.headers);
+    });
+
+    it('Should be successfull add headers to HttpClient', async () => {
+        const { sut, storageSpy, httpClientSpy } = makeSut();
+
+        storageSpy.response = faker.string.uuid();
+        const httpRequest = mockRequest();
+
+        await sut.request(httpRequest);
+
+        expect(httpClientSpy.url).toBe(httpRequest.url);
+        expect(httpClientSpy.method).toBe(httpRequest.method);
+        expect(httpClientSpy.headers).toEqual({
+            'Authorization': storageSpy.response
+        });
     });
 });
