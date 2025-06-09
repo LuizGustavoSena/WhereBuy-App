@@ -61,4 +61,23 @@ describe('AuthorizeHttpClientDecorator', () => {
             'Authorization': storageSpy.response
         });
     });
+
+    it('Should be successfull merge headers to HttpClient', async () => {
+        const { sut, storageSpy, httpClientSpy } = makeSut();
+
+        const field = faker.string.sample();
+        const httpRequest = mockRequest();
+
+        storageSpy.response = faker.string.uuid();
+        httpRequest.headers = { field };
+
+        await sut.request(httpRequest);
+
+        expect(httpClientSpy.url).toBe(httpRequest.url);
+        expect(httpClientSpy.method).toBe(httpRequest.method);
+        expect(httpClientSpy.headers).toEqual({
+            field,
+            'Authorization': storageSpy.response
+        });
+    });
 });
