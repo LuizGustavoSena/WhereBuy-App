@@ -80,4 +80,12 @@ describe('AuthorizeHttpClientDecorator', () => {
             'Authorization': storageSpy.response
         });
     });
+
+    it('Should be return the same result as HttpClient', async () => {
+        const { sut, httpClientSpy } = makeSut()
+
+        const httpResponse = await sut.request(mockRequest())
+
+        expect(httpResponse).toEqual(httpClientSpy.response)
+    });
 });
