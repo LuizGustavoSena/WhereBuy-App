@@ -1,12 +1,10 @@
-import { StatusBar } from 'expo-status-bar';
-import { Text, View } from 'react-native';
+import { Stack } from 'expo-router';
 import './global.css';
 
-export default function Index() {
+export default function Layout() {
     return (
-        <View className="w-10 h-10 bg-red-500">
-            <Text>Hello World Index!</Text>
-            <StatusBar style="auto" />
-        </View>
+        <Stack>
+            <Stack.Screen name="login" options={{ headerShown: false }} />
+        </Stack>
     );
 }

@@ -22,7 +22,7 @@
     "./src/**/*.ts",
     "./src/**/*.tsx",
     "./test/**/*.ts",
-    "./wherebuy.d.ts",
+    "nativewind-env.d.ts"
   ],
   "exclude": [
     "./node_modules/*",
