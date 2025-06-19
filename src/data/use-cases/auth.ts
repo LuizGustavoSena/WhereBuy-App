@@ -12,7 +12,7 @@ export default class AuthUseCase implements IAuth {
     signin = async (params: SigninParams): Promise<SigninResponse> => {
         const response = await this.httpClient.request({
             method: 'post',
-            url: `${env.URL_AUTH}/login_account`,
+            url: `${env.EXPO_PUBLIC_URL_AUTH}/login_account`,
             body: params
         });
 
@@ -25,7 +25,7 @@ export default class AuthUseCase implements IAuth {
     signup = async (params: SignupParams): Promise<void> => {
         const response = await this.httpClient.request({
             method: 'post',
-            url: `${env.URL_AUTH}/create_account`,
+            url: `${env.EXPO_PUBLIC_URL_AUTH}/create_account`,
             body: params
         });
 
