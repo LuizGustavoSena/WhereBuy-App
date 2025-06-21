@@ -1,5 +1,6 @@
 import Button from '@src/components/button';
 import Input from '@src/components/input';
+import ModalError from '@src/components/modals/modal-error';
 import { CacheEnum } from '@src/domain/enums/cache-enum';
 import { makeAuth } from '@src/main/fatories/auth-factory';
 import { makeLocalStorageCacheClient } from '@src/main/fatories/local-storage-cache-client-factory';
@@ -10,10 +11,17 @@ const cacheUseCase = makeLocalStorageCacheClient();
 const authUseCase = makeAuth();
 
 export default function Login() {
-    const [email, setEmail] = useState<string>('');
-    const [pass, setPass] = useState<string>('');
+    const [email, setEmail] = useState<string | null>();
+    const [pass, setPass] = useState<string | null>();
+    const [messageError, setMessageError] = useState<string | null>();
 
     const submitLogin = async () => {
+        if (!email || !pass) {
+            setMessageError('Preencha as informações solicitadas');
+
+            return;
+        }
+
         try {
             const response = await authUseCase.signin({
                 email,
@@ -25,16 +33,17 @@ export default function Login() {
                 value: response.token
             });
         } catch (error) {
-
+            setMessageError('Erro ao efetuar login');
         }
     }
 
     return (
-        <>
-            <View className="w-full bg-blue-500" style={{ flex: 1 }}>
+        <View className='flex justify-center items-center'>
+            <View className="w-full bg-blue-500" style={{ height: 250 }}>
             </View>
+            <ModalError show={!!messageError} message={messageError as string} setModal={setMessageError} />
 
-            <View className="w-full p-4" style={{ flex: 2 }}>
+            <View className="w-full p-4 bg-white h-[600px] rounded-t-[50px] mt-[-45px]">
                 <Text className='text-center text-2xl'>Bem vindo de volta</Text>
 
                 <View className='p-4'>
@@ -49,6 +58,6 @@ export default function Login() {
                     </View>
                 </View>
             </View>
-        </>
+        </View>
     );
 }
