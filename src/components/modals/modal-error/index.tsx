@@ -1,24 +1,20 @@
 import Button from "@src/components/button";
-import { Modal, Text, View } from "react-native";
+import { Image, Text, View } from "react-native";
+import Modal from 'react-native-modal';
 
 type ModalErrorProps = {
     show: boolean;
     message: string;
-    setModal(value: string): void;
+    setModal(value: null): void;
 }
 export default function ModalError({ show, message, setModal }: ModalErrorProps) {
     return (
-        <Modal
-            animationType="fade"
-            transparent={true}
-            visible={show}
-            onRequestClose={() => {
-                setModal('');
-            }}>
+        <Modal isVisible={show}>
             <View className="flex justify-center items-center">
-                <View className="bg-white rounded-lg items-center" style={{ width: 250, height: 200 }}>
+                <View className="flex justify-evenly items-center bg-white rounded-lg items-center w-[250px] h-[200px] border-t-[7px] border-purple-300">
+                    <Image source={require('../../../../assets/error.png')} />
                     <Text>{message}</Text>
-                    <Button title="Entendi" action={() => setModal('')} />
+                    <Button title="Entendi" action={() => setModal(null)} />
                 </View>
             </View>
         </Modal>
