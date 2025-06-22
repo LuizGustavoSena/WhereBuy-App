@@ -40,7 +40,7 @@ export default function Login() {
     return (
         <View className='flex justify-center items-center'>
             <ModalError show={!!messageError} message={messageError as string} setModal={setMessageError} />
-            <View className="w-full bg-blue-500" style={{ height: 250 }}>
+            <View className="w-full bg-purple-300 h-[300px]">
             </View>
 
             <View className="w-full p-4 bg-white h-[600px] rounded-t-[50px] mt-[-45px]">
