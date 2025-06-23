@@ -1,20 +1,27 @@
 import { InvalidCredentialsError } from "@src/domain/errors/invalid-credentials";
 import { SigninParams } from "@src/domain/models/auth";
-import { IAuthValidation } from "@src/domain/validations/auth-validation";
-import { z } from "zod";
+import { AuthMessageRequire, AuthMessageType, IAuthValidation } from "@src/domain/validations/auth-validation";
+import { z, ZodError } from "zod";
 
 export class AuthValidationZod implements IAuthValidation {
     constructor() { };
 
     login(props: SigninParams): void | Error {
         const schema = z.object({
-            email: z.string().email(),
-            password: z.string().min(5)
+            email: z.string({ required_error: AuthMessageRequire.EMAIL, invalid_type_error: AuthMessageType.EMAIL }).email({ message: AuthMessageType.EMAIL }),
+            password: z.string({ required_error: AuthMessageRequire.PASSWORD, invalid_type_error: AuthMessageType.PASSWORD }).min(5)
         });
 
-        const parse = schema.safeParse(props);
+        this.throwValidationError(() => schema.parse(props));
+    }
 
-        if (!parse.success)
-            throw new InvalidCredentialsError(JSON.stringify(parse.error.format()));
+    private throwValidationError(callback: Function) {
+        try {
+            callback();
+        } catch (error: any) {
+            if (!(error instanceof ZodError)) return;
+
+            throw new InvalidCredentialsError(error.errors.map(el => el.message).join(', '));
+        }
     }
 }
