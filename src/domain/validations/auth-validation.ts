@@ -10,5 +10,5 @@ export enum AuthMessageType {
     PASSWORD = 'O campo password deve ser do tipo string',
 }
 export interface IAuthValidation {
-    login(params: SigninParams): void | Error;
+    signin(params: SigninParams): void | Error;
 }
