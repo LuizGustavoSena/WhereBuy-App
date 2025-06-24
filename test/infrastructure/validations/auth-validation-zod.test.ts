@@ -21,6 +21,15 @@ describe('AuthValidationZod', () => {
         expect(() => sut.login(request)).toThrow(new InvalidCredentialsError(AuthMessageType.EMAIL));
     });
 
+    it('Should be error login with incorrect type email', () => {
+        const request = {
+            email: faker.string.sample(),
+            password: faker.string.sample()
+        };
+
+        expect(() => sut.login(request)).toThrow(new InvalidCredentialsError(AuthMessageType.EMAIL));
+    });
+
     it('Should be error login with incorrect password', () => {
         const request = {
             email: faker.internet.email(),
