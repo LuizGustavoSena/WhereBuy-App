@@ -20,4 +20,13 @@ describe('AuthValidationZod', () => {
         // @ts-expect-error
         expect(() => sut.login(request)).toThrow(new InvalidCredentialsError(AuthMessageType.EMAIL));
     });
+
+    it('Should be error login with incorrect password', () => {
+        const request = {
+            email: faker.internet.email(),
+            password: faker.number.int()
+        };
+        // @ts-expect-error
+        expect(() => sut.login(request)).toThrow(new InvalidCredentialsError(AuthMessageType.PASSWORD));
+    });
 });
