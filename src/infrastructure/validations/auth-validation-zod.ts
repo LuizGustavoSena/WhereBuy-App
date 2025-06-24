@@ -6,7 +6,7 @@ import { z, ZodError } from "zod";
 export class AuthValidationZod implements IAuthValidation {
     constructor() { };
 
-    login(props: SigninParams): void | Error {
+    signin(props: SigninParams): void | Error {
         const schema = z.object({
             email: z.string({ required_error: AuthMessageRequire.EMAIL, invalid_type_error: AuthMessageType.EMAIL }).email({ message: AuthMessageType.EMAIL }),
             password: z.string({ required_error: AuthMessageRequire.PASSWORD, invalid_type_error: AuthMessageType.PASSWORD }).min(5)
