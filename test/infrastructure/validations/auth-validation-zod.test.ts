@@ -2,7 +2,7 @@ import { faker } from "@faker-js/faker";
 import { InvalidCredentialsError } from '@src/domain/errors/invalid-credentials';
 import { AuthMessageType } from "@src/domain/validations/auth-validation";
 import { AuthValidationZod } from "@src/infrastructure/validations/auth-validation-zod";
-import { makeSigninRequest } from "@test/domain/mocks/mock-auth";
+import { makeSigninRequest, makeSignupRequest } from "@test/domain/mocks/mock-auth";
 import { describe, expect, it } from "vitest";
 
 export const sut = new AuthValidationZod();
@@ -37,5 +37,9 @@ describe('AuthValidationZod', () => {
         };
         // @ts-expect-error
         expect(() => sut.signin(request)).toThrow(new InvalidCredentialsError(AuthMessageType.PASSWORD));
+    });
+
+    it('Should be successfull signup with correct params', () => {
+        expect(sut.signup(makeSignupRequest())).toBeUndefined();
     });
 });
