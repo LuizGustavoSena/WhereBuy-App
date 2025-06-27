@@ -53,7 +53,7 @@ describe('AuthValidationZod', () => {
         expect(() => sut.signup(request)).toThrow(new InvalidCredentialsError(AuthMessageType.EMAIL));
     });
 
-    it('Should be error signin with incorrect type email', () => {
+    it('Should be error signup with incorrect type email', () => {
         const request = {
             email: faker.string.sample(),
             password: faker.string.sample(),
@@ -61,5 +61,15 @@ describe('AuthValidationZod', () => {
         };
 
         expect(() => sut.signup(request)).toThrow(new InvalidCredentialsError(AuthMessageType.EMAIL));
+    });
+
+    it('Should be error signup with incorrect password', () => {
+        const request = {
+            email: faker.internet.email(),
+            password: faker.number.int(),
+            name: faker.person.fullName()
+        };
+        // @ts-expect-error
+        expect(() => sut.signup(request)).toThrow(new InvalidCredentialsError(AuthMessageType.PASSWORD));
     });
 });
