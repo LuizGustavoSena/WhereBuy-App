@@ -2,13 +2,16 @@ import Button from '@src/components/button';
 import Input from '@src/components/input';
 import ModalError from '@src/components/modals/modal-error';
 import { CacheEnum } from '@src/domain/enums/cache-enum';
+import { InvalidCredentialsError } from '@src/domain/errors/invalid-credentials';
 import { makeAuth } from '@src/main/fatories/auth-factory';
+import { makeAuthValidation } from '@src/main/fatories/auth-validation';
 import { makeLocalStorageCacheClient } from '@src/main/fatories/local-storage-cache-client-factory';
 import React, { useState } from 'react';
 import { Pressable, Text, View } from "react-native";
 
 const cacheUseCase = makeLocalStorageCacheClient();
 const authUseCase = makeAuth();
+const authValidation = makeAuthValidation();
 
 export default function Login() {
     const [email, setEmail] = useState<string | null>();
@@ -23,6 +26,12 @@ export default function Login() {
         }
 
         try {
+
+            authValidation.signin({
+                email,
+                password: pass
+            });
+
             const response = await authUseCase.signin({
                 email,
                 password: pass
@@ -33,7 +42,12 @@ export default function Login() {
                 value: response.token
             });
         } catch (error) {
-            setMessageError('Erro ao efetuar login');
+            var messageError = 'Erro ao efetuar login';
+
+            if (error instanceof InvalidCredentialsError)
+                messageError = error.message;
+
+            setMessageError(messageError);
         }
     }
 
