@@ -42,4 +42,14 @@ describe('AuthValidationZod', () => {
     it('Should be successfull signup with correct params', () => {
         expect(sut.signup(makeSignupRequest())).toBeUndefined();
     });
+
+    it('Should be error signup with incorrect email', () => {
+        const request = {
+            email: faker.number.int(),
+            password: faker.string.sample(),
+            name: faker.person.fullName()
+        };
+        // @ts-expect-error
+        expect(() => sut.signup(request)).toThrow(new InvalidCredentialsError(AuthMessageType.EMAIL));
+    });
 });
