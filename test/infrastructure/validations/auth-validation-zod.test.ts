@@ -52,4 +52,14 @@ describe('AuthValidationZod', () => {
         // @ts-expect-error
         expect(() => sut.signup(request)).toThrow(new InvalidCredentialsError(AuthMessageType.EMAIL));
     });
+
+    it('Should be error signin with incorrect type email', () => {
+        const request = {
+            email: faker.string.sample(),
+            password: faker.string.sample(),
+            name: faker.person.fullName()
+        };
+
+        expect(() => sut.signup(request)).toThrow(new InvalidCredentialsError(AuthMessageType.EMAIL));
+    });
 });
