@@ -26,7 +26,6 @@ export default function Login() {
         }
 
         try {
-
             authValidation.signin({
                 email,
                 password: pass
