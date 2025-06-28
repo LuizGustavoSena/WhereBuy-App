@@ -1,8 +1,11 @@
 import { SigninParams, SignupParams } from "../models/auth";
 
+export const MIN_LENGTH_PASSWORD = 5;
+
 export enum AuthMessageRequire {
-    EMAIL = 'O campo email deve ser preenchido',
-    PASSWORD = 'O campo password deve ser preenchido',
+    EMAIL = 'O email deve ser preenchido',
+    PASSWORD = 'A senha deve ser preenchido',
+    PASSWORD_LENGTH = `A senha deve ser de no mínimo ${MIN_LENGTH_PASSWORD} caracteres`,
     NAME = 'O campo name deve ser preenchido',
 }
 

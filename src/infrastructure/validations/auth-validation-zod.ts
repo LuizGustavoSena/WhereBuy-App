@@ -1,12 +1,12 @@
 import { InvalidCredentialsError } from "@src/domain/errors/invalid-credentials";
 import { SigninParams, SignupParams } from "@src/domain/models/auth";
-import { AuthMessageRequire, AuthMessageType, IAuthValidation } from "@src/domain/validations/auth-validation";
+import { AuthMessageRequire, AuthMessageType, IAuthValidation, MIN_LENGTH_PASSWORD } from "@src/domain/validations/auth-validation";
 import { z, ZodError } from "zod";
 
 export class AuthValidationZod implements IAuthValidation {
     schema = z.object({
         email: z.string({ required_error: AuthMessageRequire.EMAIL, invalid_type_error: AuthMessageType.EMAIL }).email({ message: AuthMessageType.EMAIL }),
-        password: z.string({ required_error: AuthMessageRequire.PASSWORD, invalid_type_error: AuthMessageType.PASSWORD }).min(5)
+        password: z.string({ required_error: AuthMessageRequire.PASSWORD, invalid_type_error: AuthMessageType.PASSWORD }).min(MIN_LENGTH_PASSWORD, { message: AuthMessageRequire.PASSWORD_LENGTH })
     });
     constructor() { }
 
