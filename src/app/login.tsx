@@ -2,6 +2,7 @@ import Button from '@src/components/button';
 import Input from '@src/components/input';
 import ModalError from '@src/components/modals/modal-error';
 import { CacheEnum } from '@src/domain/enums/cache-enum';
+import { TabNavigation } from '@src/domain/enums/tab-navigation';
 import { InvalidCredentialsError } from '@src/domain/errors/invalid-credentials';
 import { makeAuth } from '@src/main/fatories/auth-factory';
 import { makeAuthValidation } from '@src/main/fatories/auth-validation';
@@ -16,6 +17,8 @@ const authValidation = makeAuthValidation();
 export default function Login() {
     const [email, setEmail] = useState<string | null>();
     const [pass, setPass] = useState<string | null>();
+    const [name, setName] = useState<string | null>();
+    const [tab, setTab] = useState<TabNavigation>(TabNavigation.SIGNIN);
     const [messageError, setMessageError] = useState<string | null>();
 
     const submitLogin = async () => {
@@ -57,19 +60,44 @@ export default function Login() {
             </View>
 
             <View className="w-full p-4 bg-white h-[600px] rounded-t-[50px] mt-[-45px]">
-                <Text className='text-center text-2xl'>Bem vindo de volta</Text>
+                {
+                    tab === TabNavigation.SIGNIN ?
+                        (
+                            <>
+                                <Text className='text-center text-2xl'>Bem vindo de volta</Text>
 
-                <View className='p-4'>
-                    <Input placeholder='Email' action={setEmail} />
-                    <Input placeholder='Senha' action={setPass} secureTextEntry />
+                                <View className='p-4'>
+                                    <Input placeholder='Email' action={setEmail} />
+                                    <Input placeholder='Senha' action={setPass} secureTextEntry />
 
-                    <View className='flex flex-row justify-around m-5'>
-                        <Pressable className='justify-center' onPress={() => { }}>
-                            <Text className='text-lg color-blue-400'>Não possui cadastro?</Text>
-                        </Pressable>
-                        <Button title='Entrar' action={submitLogin} />
-                    </View>
-                </View>
+                                    <View className='flex flex-row justify-around m-5'>
+                                        <Pressable className='justify-center' onPress={() => setTab(TabNavigation.SIGNUP)}>
+                                            <Text className='text-lg color-blue-400'>Não possui cadastro?</Text>
+                                        </Pressable>
+                                        <Button title='Entrar' action={submitLogin} />
+                                    </View>
+                                </View>
+                            </>
+                        )
+                        :
+                        (
+                            <>
+                                <Text className='text-center text-2xl'>Cadastro</Text>
+
+                                <View className='p-4'>
+                                    <Input placeholder='Nome' action={setPass} />
+                                    <Input placeholder='Email' action={setEmail} />
+                                    <Input placeholder='Senha' action={setName} secureTextEntry />
+
+                                    <View className='flex flex-row justify-around m-5'>
+                                        <Pressable className='justify-center' onPress={() => setTab(TabNavigation.SIGNIN)}>
+                                            <Text className='text-lg color-blue-400'>Já possuo cadastro!</Text>
+                                        </Pressable>
+                                        <Button title='Entrar' action={submitLogin} />
+                                    </View>
+                                </View>
+                            </>
+                        )}
             </View>
         </View>
     );
