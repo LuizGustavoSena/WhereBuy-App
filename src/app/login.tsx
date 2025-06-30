@@ -53,6 +53,35 @@ export default function Login() {
         }
     }
 
+    const submitSignUp = async () => {
+        if (!email || !pass || !name) {
+            setMessageError('Preencha as informações solicitadas');
+
+            return;
+        }
+
+        try {
+            authValidation.signup({
+                email,
+                password: pass,
+                name
+            });
+
+            await authUseCase.signup({
+                email,
+                password: pass,
+                name
+            });
+        } catch (error) {
+            var messageError = 'Erro ao efetuar cadastro';
+
+            if (error instanceof InvalidCredentialsError)
+                messageError = error.message;
+
+            setMessageError(messageError);
+        }
+    }
+
     return (
         <View className='flex justify-center items-center'>
             <ModalError show={!!messageError} message={messageError as string} setModal={setMessageError} />
@@ -82,18 +111,18 @@ export default function Login() {
                         :
                         (
                             <>
-                                <Text className='text-center text-2xl'>Cadastro</Text>
+                                <Text className='text-center text-2xl'>Cadastre seu usuário</Text>
 
                                 <View className='p-4'>
-                                    <Input placeholder='Nome' action={setPass} />
+                                    <Input placeholder='Nome' action={setName} />
                                     <Input placeholder='Email' action={setEmail} />
-                                    <Input placeholder='Senha' action={setName} secureTextEntry />
+                                    <Input placeholder='Senha' action={setPass} secureTextEntry />
 
                                     <View className='flex flex-row justify-around m-5'>
                                         <Pressable className='justify-center' onPress={() => setTab(TabNavigation.SIGNIN)}>
                                             <Text className='text-lg color-blue-400'>Já possuo cadastro!</Text>
                                         </Pressable>
-                                        <Button title='Entrar' action={submitLogin} />
+                                        <Button title='Cadastrar' action={submitSignUp} />
                                     </View>
                                 </View>
                             </>
