@@ -1,6 +1,7 @@
 import Button from '@src/components/button';
 import Input from '@src/components/input';
 import ModalError from '@src/components/modals/modal-error';
+import ModalSuccess from '@src/components/modals/modal-success';
 import { CacheEnum } from '@src/domain/enums/cache-enum';
 import { TabNavigation } from '@src/domain/enums/tab-navigation';
 import { InvalidCredentialsError } from '@src/domain/errors/invalid-credentials';
@@ -8,7 +9,7 @@ import { makeAuth } from '@src/main/fatories/auth-factory';
 import { makeAuthValidation } from '@src/main/fatories/auth-validation';
 import { makeLocalStorageCacheClient } from '@src/main/fatories/local-storage-cache-client-factory';
 import React, { useState } from 'react';
-import { Pressable, Text, View } from "react-native";
+import { Keyboard, Pressable, Text, View } from "react-native";
 
 const cacheUseCase = makeLocalStorageCacheClient();
 const authUseCase = makeAuth();
@@ -20,6 +21,7 @@ export default function Login() {
     const [name, setName] = useState<string | null>();
     const [tab, setTab] = useState<TabNavigation>(TabNavigation.SIGNIN);
     const [messageError, setMessageError] = useState<string | null>();
+    const [messageSuccess, setMessageSuccess] = useState<string | null>();
 
     const submitLogin = async () => {
         if (!email || !pass) {
@@ -72,6 +74,8 @@ export default function Login() {
                 password: pass,
                 name
             });
+
+            setMessageSuccess('Usuário cadastrado, agora faça o login')
         } catch (error) {
             var messageError = 'Erro ao efetuar cadastro';
 
@@ -82,9 +86,22 @@ export default function Login() {
         }
     }
 
+    const setTabNavigation = (tab: TabNavigation) => {
+        Keyboard.dismiss();
+
+        setName(null);
+        setEmail(null);
+        setPass(null);
+
+        setTab(tab);
+    }
+
     return (
         <View className='flex justify-center items-center'>
             <ModalError show={!!messageError} message={messageError as string} setModal={setMessageError} />
+            <ModalSuccess show={!!messageSuccess} message={messageSuccess as string}
+                action={() => { setMessageSuccess(null); setTabNavigation(TabNavigation.SIGNIN); }} />
+
             <View className="w-full bg-purple-300 h-[300px]">
             </View>
 
@@ -96,11 +113,11 @@ export default function Login() {
                                 <Text className='text-center text-2xl'>Bem vindo de volta</Text>
 
                                 <View className='p-4'>
-                                    <Input placeholder='Email' action={setEmail} />
-                                    <Input placeholder='Senha' action={setPass} secureTextEntry />
+                                    <Input placeholder='Email' action={setEmail} value={email as string} />
+                                    <Input placeholder='Senha' action={setPass} value={pass as string} secureTextEntry />
 
                                     <View className='flex flex-row justify-around m-5'>
-                                        <Pressable className='justify-center' onPress={() => setTab(TabNavigation.SIGNUP)}>
+                                        <Pressable className='justify-center' onPress={() => setTabNavigation(TabNavigation.SIGNUP)}>
                                             <Text className='text-lg color-blue-400'>Não possui cadastro?</Text>
                                         </Pressable>
                                         <Button title='Entrar' action={submitLogin} />
@@ -114,12 +131,12 @@ export default function Login() {
                                 <Text className='text-center text-2xl'>Cadastre seu usuário</Text>
 
                                 <View className='p-4'>
-                                    <Input placeholder='Nome' action={setName} />
-                                    <Input placeholder='Email' action={setEmail} />
-                                    <Input placeholder='Senha' action={setPass} secureTextEntry />
+                                    <Input placeholder='Nome' action={setName} value={name as string} />
+                                    <Input placeholder='Email' action={setEmail} value={email as string} />
+                                    <Input placeholder='Senha' action={setPass} value={pass as string} secureTextEntry />
 
                                     <View className='flex flex-row justify-around m-5'>
-                                        <Pressable className='justify-center' onPress={() => setTab(TabNavigation.SIGNIN)}>
+                                        <Pressable className='justify-center' onPress={() => setTabNavigation(TabNavigation.SIGNIN)}>
                                             <Text className='text-lg color-blue-400'>Já possuo cadastro!</Text>
                                         </Pressable>
                                         <Button title='Cadastrar' action={submitSignUp} />
