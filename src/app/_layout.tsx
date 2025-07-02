@@ -8,6 +8,7 @@ export default function Layout() {
         <SafeAreaView className='flex-1'>
             <Stack>
                 <Stack.Screen name="login" options={{ headerShown: false }} />
+                <Stack.Screen name="shopping-list" options={{ headerShown: false }} />
             </Stack>
         </SafeAreaView>
     );
