@@ -1,7 +1,7 @@
 import Button from "@src/components/button";
 import Input from "@src/components/input";
 import { TypeAmountEnum } from "@src/domain/models/shopping-list";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Image, Pressable, Text, View } from "react-native";
 import Modal from "react-native-modal";
 
@@ -10,6 +10,10 @@ export default function ShoppingList() {
     const [itemName, setItemName] = useState<string | null>();
     const [itemAmount, setItemAmount] = useState<string | null>();
     const [itemTypeAmount, setItemTypeAmount] = useState<TypeAmountEnum | null>();
+
+    useEffect(() => {
+
+    }, [itemName, itemAmount, itemTypeAmount]);
 
     const closeAddItemModal = () => {
         setItemName(null);
@@ -45,7 +49,6 @@ export default function ShoppingList() {
                                 closeAddItemModal();
                             }} />
                         </View>
-
                     </View>
                 </View>
             </Modal>
