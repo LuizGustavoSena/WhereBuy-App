@@ -5,7 +5,7 @@ import { AuthValidationZod } from "@src/infrastructure/validations/auth-validati
 import { makeSigninRequest, makeSignupRequest } from "@test/domain/mocks/mock-auth";
 import { describe, expect, it } from "vitest";
 
-export const sut = new AuthValidationZod();
+const sut = new AuthValidationZod();
 
 describe('AuthValidationZod', () => {
     it('Should be successfull signin with correct params', () => {
