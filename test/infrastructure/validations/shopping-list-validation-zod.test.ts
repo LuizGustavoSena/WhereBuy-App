@@ -14,7 +14,6 @@ describe('ShoppingListValidationZod', () => {
     });
 
     it('Should be error when create shopping list item with incorrect name type', () => {
-
         const params = {
             typeAmount: faker.helpers.enumValue(TypeAmountEnum),
             name: faker.number.int(),
@@ -22,5 +21,15 @@ describe('ShoppingListValidationZod', () => {
         };
         // @ts-expect-error
         expect(() => sut.create(params)).toThrow(new InvalidCredentialsError(ShoppingListMessageType.NAME));
+    });
+
+    it('Should be error when create shopping list item with incorrect amount type', () => {
+        const params = {
+            typeAmount: faker.helpers.enumValue(TypeAmountEnum),
+            name: faker.person.fullName(),
+            amount: faker.string.numeric()
+        };
+        // @ts-expect-error
+        expect(() => sut.create(params)).toThrow(new InvalidCredentialsError(ShoppingListMessageType.AMOUNT));
     });
 });
