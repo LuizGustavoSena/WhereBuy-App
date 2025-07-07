@@ -40,6 +40,9 @@ export class ShoppingListValidationZod implements IShoppingListValidation {
         } catch (error: any) {
             if (!(error instanceof ZodError)) return;
 
+            if (error.errors.find(el => el.message.includes('Invalid enum value')))
+                throw new InvalidCredentialsError(ShoppingListMessageType.TYPE_AMOUNT);
+
             throw new InvalidCredentialsError(error.errors.map(el => el.message).join(', '));
         }
     }
