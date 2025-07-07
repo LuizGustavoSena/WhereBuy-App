@@ -32,4 +32,14 @@ describe('ShoppingListValidationZod', () => {
         // @ts-expect-error
         expect(() => sut.create(params)).toThrow(new InvalidCredentialsError(ShoppingListMessageType.AMOUNT));
     });
+
+    it('Should be error when create shopping list item with incorrect typeAmount type', () => {
+        const params = {
+            typeAmount: faker.string.sample(),
+            name: faker.person.fullName(),
+            amount: Number(faker.commerce.price())
+        };
+        // @ts-expect-error
+        expect(() => sut.create(params)).toThrow(new InvalidCredentialsError(ShoppingListMessageType.TYPE_AMOUNT));
+    });
 });
