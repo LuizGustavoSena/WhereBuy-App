@@ -1,19 +1,25 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import Button from "@src/components/button";
 import Input from "@src/components/input";
 import { TypeAmountEnum } from "@src/domain/models/shopping-list";
-import { useEffect, useState } from "react";
+import { CreateValidation } from "@src/domain/validations/shopping-list-validation";
+import { makeShoppingListValidation } from "@src/main/fatories/shopping-list-validation";
+import { useState } from "react";
+import { Controller, useForm } from 'react-hook-form';
 import { Image, Pressable, Text, View } from "react-native";
 import Modal from "react-native-modal";
+
+const shoppingListValidation = makeShoppingListValidation();
 
 export default function ShoppingList() {
     const [addItem, setAddItem] = useState(false);
     const [itemName, setItemName] = useState<string | null>();
-    const [itemAmount, setItemAmount] = useState<string | null>();
+    const [itemAmount, setItemAmount] = useState<number | null>();
     const [itemTypeAmount, setItemTypeAmount] = useState<TypeAmountEnum | null>();
 
-    useEffect(() => {
-
-    }, [itemName, itemAmount, itemTypeAmount]);
+    const { control, handleSubmit } = useForm<CreateValidation>({
+        resolver: zodResolver(shoppingListValidation.createSchema)
+    });
 
     const closeAddItemModal = () => {
         setItemName(null);
@@ -37,15 +43,18 @@ export default function ShoppingList() {
                                 <Image source={require('../../assets/close-icon.png')} />
                             </Pressable>
                         </View>
-                        <Input className="w-full" placeholder="Nome" value={itemName as string} action={(name) => { setItemName(name) }} />
+                        <Controller control={control} name="name" render={({ field, fieldState }) =>
+                            <Input className="w-full" placeholder="Nome" value={field.value} action={field.onChange} errorMessage={fieldState.error?.message} />
+                        } />
+
                         <View className="flex flex-row justify-between w-full">
-                            <Input className="w-[80px]" placeholder="Quant." value={itemAmount as string} action={(amount) => { setItemAmount(amount) }} />
+                            <Input className="w-[80px]" placeholder="Quant." value={itemAmount ? String(itemAmount) : '0'} action={(amount) => { setItemAmount(amount) }} />
                             <Input className="w-[160px]" placeholder="Tipo de quantidade" value={itemName as string} action={(name) => { setItemName(name) }} />
                         </View>
                         <View className="flex flex-row justify-between mt-5">
                             <Button className="bg-transparent" title="Cancelar" action={() => closeAddItemModal()} />
                             <Button title="Salvar" action={async () => {
-                                await submitItem();
+                                handleSubmit(submitItem)
                                 closeAddItemModal();
                             }} />
                         </View>
