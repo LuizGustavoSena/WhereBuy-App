@@ -1,4 +1,4 @@
-import { CreateShoppingListProps, TypeAmountEnum } from "../models/shopping-list";
+import { TypeAmountEnum } from "../models/shopping-list";
 
 export enum ShoppingListMessageRequire {
     ID = 'O id deve ser preenchido',
@@ -14,6 +14,8 @@ export const ShoppingListMessageType = {
     TYPE_AMOUNT: `Tipo de quantidade não reconhecido, informe: ${Object.values(TypeAmountEnum).join(', ')}`
 };
 
-export interface IShoppingListValidation {
-    create(params: CreateShoppingListProps): void | Error;
+export type CreateValidation = {
+    name: string;
+    amount: number;
+    typeAmount: TypeAmountEnum;
 }
