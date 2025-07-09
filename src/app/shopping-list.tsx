@@ -44,12 +44,18 @@ export default function ShoppingList() {
                             </Pressable>
                         </View>
                         <Controller control={control} name="name" render={({ field, fieldState }) =>
-                            <Input className="w-full" placeholder="Nome" value={field.value} action={field.onChange} errorMessage={fieldState.error?.message} />
-                        } />
-
+                            <Input className="w-full" placeholder="Nome" value={field.value}
+                                action={field.onChange} errorMessage={fieldState.error?.message} />}
+                        />
                         <View className="flex flex-row justify-between w-full">
-                            <Input className="w-[80px]" placeholder="Quant." value={itemAmount ? String(itemAmount) : '0'} action={(amount) => { setItemAmount(amount) }} />
-                            <Input className="w-[160px]" placeholder="Tipo de quantidade" value={itemName as string} action={(name) => { setItemName(name) }} />
+                            <Controller control={control} name="amount" render={({ field, fieldState }) =>
+                                <Input className="w-[80px]" placeholder="Quant" value={field.value}
+                                    action={field.onChange} errorMessage={fieldState.error?.message} />}
+                            />
+                            <Controller control={control} name="typeAmount" render={({ field, fieldState }) =>
+                                <Input className="w-[160px]" placeholder="Tipo de quantidade" value={field.value}
+                                    action={field.onChange} errorMessage={fieldState.error?.message} />}
+                            />
                         </View>
                         <View className="flex flex-row justify-between mt-5">
                             <Button className="bg-transparent" title="Cancelar" action={() => closeAddItemModal()} />
