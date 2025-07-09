@@ -3,7 +3,7 @@ import { Text, TextInput } from "react-native";
 type Props = {
     placeholder: string;
     action(text: string): void;
-    value?: string;
+    value?: string | number;
     className?: string;
     secureTextEntry?: boolean;
     errorMessage?: string;
@@ -15,7 +15,7 @@ export default function Input({ placeholder, action, value, className, secureTex
             <TextInput
                 className={`border border-purple-800 rounded-md p-4 mt-5 ${className} ${errorMessage && 'border-red-400'}`}
                 onChangeText={(text) => action(text)}
-                value={value}
+                value={`${value}`}
                 placeholder={placeholder}
                 secureTextEntry={secureTextEntry}
             />
