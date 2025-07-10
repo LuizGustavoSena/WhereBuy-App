@@ -1,8 +1,8 @@
-import { Text, TextInput } from "react-native";
+import { TextInput } from "react-native";
 
 type Props = {
     placeholder: string;
-    action(text: string): void;
+    action(text: string | number): void;
     value?: string | number;
     className?: string;
     secureTextEntry?: boolean;
@@ -14,12 +14,11 @@ export default function Input({ placeholder, action, value, className, secureTex
         <>
             <TextInput
                 className={`border border-purple-800 rounded-md p-4 mt-5 ${className} ${errorMessage && 'border-red-400'}`}
-                onChangeText={(text) => action(text)}
-                value={`${value}`}
+                onChangeText={(text: string | number) => action(isNaN(text as number) ? text : +text)}
+                value={!!value ? `${value}` : ''}
                 placeholder={placeholder}
                 secureTextEntry={secureTextEntry}
             />
-            <Text>{errorMessage}</Text>
         </>
     )
 }
