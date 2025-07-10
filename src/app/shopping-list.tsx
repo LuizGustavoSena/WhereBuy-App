@@ -1,7 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import Button from "@src/components/button";
 import Input from "@src/components/input";
-import { TypeAmountEnum } from "@src/domain/models/shopping-list";
 import { CreateValidation } from "@src/domain/validations/shopping-list-validation";
 import { makeShoppingListValidation } from "@src/main/fatories/shopping-list-validation";
 import { useState } from "react";
@@ -13,23 +12,18 @@ const shoppingListValidation = makeShoppingListValidation();
 
 export default function ShoppingList() {
     const [addItem, setAddItem] = useState(false);
-    const [itemName, setItemName] = useState<string | null>();
-    const [itemAmount, setItemAmount] = useState<number | null>();
-    const [itemTypeAmount, setItemTypeAmount] = useState<TypeAmountEnum | null>();
 
-    const { control, handleSubmit } = useForm<CreateValidation>({
-        resolver: zodResolver(shoppingListValidation.createSchema)
+    const { control, handleSubmit, formState } = useForm<CreateValidation>({
+        resolver: zodResolver(shoppingListValidation.createSchema),
+        mode: 'onChange'
     });
 
     const closeAddItemModal = () => {
-        setItemName(null);
-        setItemAmount(null);
-        setItemTypeAmount(null);
         setAddItem(false);
     }
 
     const submitItem = async () => {
-
+        closeAddItemModal();
     }
 
     return (
@@ -59,10 +53,7 @@ export default function ShoppingList() {
                         </View>
                         <View className="flex flex-row justify-between mt-5">
                             <Button className="bg-transparent" title="Cancelar" action={() => closeAddItemModal()} />
-                            <Button title="Salvar" action={async () => {
-                                handleSubmit(submitItem)
-                                closeAddItemModal();
-                            }} />
+                            <Button title="Salvar" action={async () => { await handleSubmit(submitItem) }} disable={!formState.isValid} />
                         </View>
                     </View>
                 </View>
