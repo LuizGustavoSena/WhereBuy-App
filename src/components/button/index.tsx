@@ -8,7 +8,7 @@ type Props = {
 }
 export default function Button({ title, action, className, disable }: Props) {
     return (
-        <Pressable className={`bg-purple-300 p-3 rounded-lg ${className} ${disable && 'bg-gray-300'}`} onPress={() => action()} disabled={disable}>
+        <Pressable className={`${disable ? 'bg-gray-300' : 'bg-purple-300'} p-3 rounded-lg ${className}`} onPress={() => action()} disabled={disable}>
             <Text className='text-lg'>{title}</Text>
         </Pressable>
     );
