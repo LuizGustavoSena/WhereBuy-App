@@ -13,7 +13,7 @@ export default function Input({ placeholder, action, value, className, secureTex
     return (
         <>
             <TextInput
-                className={`border border-purple-800 rounded-md p-4 mt-5 ${className} ${errorMessage && 'border-red-400'}`}
+                className={`border ${errorMessage ? 'border-red-400' : 'border-purple-800'} rounded-md p-4 mt-5 ${className}`}
                 onChangeText={(text: string | number) => action(isNaN(text as number) ? text : +text)}
                 value={!!value ? `${value}` : ''}
                 placeholder={placeholder}
