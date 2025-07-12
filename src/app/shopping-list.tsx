@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import Button from "@src/components/button";
 import Input from "@src/components/input";
+import { CustomPicker } from '@src/components/picker';
 import { CreateValidation } from "@src/domain/validations/shopping-list-validation";
 import { makeShoppingListValidation } from "@src/main/fatories/shopping-list-validation";
 import { useState } from "react";
@@ -26,6 +27,12 @@ export default function ShoppingList() {
         closeAddItemModal();
     }
 
+    const options = [
+        { label: "Java", value: "java" },
+        { label: "JavaScript", value: "js" },
+        { label: "Python", value: "python" },
+    ];
+
     return (
         <>
             <Modal isVisible={addItem}>
@@ -47,8 +54,14 @@ export default function ShoppingList() {
                                     action={field.onChange} errorMessage={fieldState.error?.message} />}
                             />
                             <Controller control={control} name="typeAmount" render={({ field, fieldState }) =>
-                                <Input className="w-[160px]" placeholder="Tipo de quantidade" value={field.value}
-                                    action={field.onChange} errorMessage={fieldState.error?.message} />}
+                                <CustomPicker
+                                    className="w-[160px] rounded-md mt-5 border border-purple-800"
+                                    value={field.value}
+                                    onChange={field.onChange}
+                                    options={options}
+                                    placeholder="Tipo de quantidade"
+                                />
+                            }
                             />
                         </View>
                         <View className="flex flex-row justify-between mt-5">
