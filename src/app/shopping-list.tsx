@@ -15,16 +15,17 @@ const shoppingListValidation = makeShoppingListValidation();
 export default function ShoppingList() {
     const [addItem, setAddItem] = useState(false);
 
-    const { control, handleSubmit, formState } = useForm<CreateValidation>({
+    const { control, handleSubmit, formState, reset } = useForm<CreateValidation>({
         resolver: zodResolver(shoppingListValidation.createSchema),
         mode: 'onChange'
     });
 
     const closeAddItemModal = () => {
+        reset();
         setAddItem(false);
     }
 
-    const submitItem = async () => {
+    const submitItem = async (data: CreateValidation) => {
         closeAddItemModal();
     }
 
@@ -67,7 +68,7 @@ export default function ShoppingList() {
                         </View>
                         <View className="flex flex-row justify-between mt-5">
                             <Button className="bg-transparent" title="Cancelar" action={() => closeAddItemModal()} />
-                            <Button title="Salvar" action={async () => { await handleSubmit(submitItem) }} disable={!formState.isValid} />
+                            <Button title="Salvar" action={handleSubmit(async (data) => await submitItem(data))} disable={!formState.isValid} />
                         </View>
                     </View>
                 </View>
