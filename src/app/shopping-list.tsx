@@ -2,6 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import Button from "@src/components/button";
 import Input from "@src/components/input";
 import { CustomPicker } from '@src/components/picker';
+import { TypeAmountEnum } from '@src/domain/models/shopping-list';
 import { CreateValidation } from "@src/domain/validations/shopping-list-validation";
 import { makeShoppingListValidation } from "@src/main/fatories/shopping-list-validation";
 import { useState } from "react";
@@ -28,9 +29,9 @@ export default function ShoppingList() {
     }
 
     const options = [
-        { label: "Java", value: "java" },
-        { label: "JavaScript", value: "js" },
-        { label: "Python", value: "python" },
+        { label: "Gramas", value: TypeAmountEnum.GRAMS },
+        { label: "Litros", value: TypeAmountEnum.LITERS },
+        { label: "Unidades", value: TypeAmountEnum.UNIT },
     ];
 
     return (
