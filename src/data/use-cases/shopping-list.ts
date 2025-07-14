@@ -13,7 +13,7 @@ export class ShoppingListUseCase implements IShoppingList {
     create = async (params: CreateShoppingListProps): Promise<CreateShoppingListResponse> => {
         const response = await this.httpClient.request({
             method: 'post',
-            url: `${env.URL_SHOPPING_LIST}`,
+            url: `${env.EXPO_PUBLIC_URL_SHOPPING_LIST}`,
             body: params
         });
 
@@ -26,7 +26,7 @@ export class ShoppingListUseCase implements IShoppingList {
     getAll = async (): Promise<GetAllShoppingListResult> => {
         const response = await this.httpClient.request({
             method: 'get',
-            url: `${env.URL_SHOPPING_LIST}`,
+            url: `${env.EXPO_PUBLIC_URL_SHOPPING_LIST}`,
         });
 
         if (response.statusCode !== HttpStatusCode.Ok && response.statusCode !== HttpStatusCode.NoContent)
@@ -38,7 +38,7 @@ export class ShoppingListUseCase implements IShoppingList {
     getByName = async (name: string): Promise<GetByNameShoppingListResult> => {
         const response = await this.httpClient.request({
             method: 'get',
-            url: `${env.URL_SHOPPING_LIST}?name=${name}`,
+            url: `${env.EXPO_PUBLIC_URL_SHOPPING_LIST}?name=${name}`,
         });
 
         if (response.statusCode !== HttpStatusCode.Ok && response.statusCode !== HttpStatusCode.NoContent)
@@ -50,7 +50,7 @@ export class ShoppingListUseCase implements IShoppingList {
     update = async ({ id, data }: UpdateShoppingListProps): Promise<UpdateShoppingListResult> => {
         const response = await this.httpClient.request({
             method: 'patch',
-            url: `${env.URL_SHOPPING_LIST}/${id}`,
+            url: `${env.EXPO_PUBLIC_URL_SHOPPING_LIST}/${id}`,
             body: data
         });
 
@@ -66,7 +66,7 @@ export class ShoppingListUseCase implements IShoppingList {
     deleteById = async (id: string): Promise<void> => {
         const response = await this.httpClient.request({
             method: 'delete',
-            url: `${env.URL_SHOPPING_LIST}/${id}`
+            url: `${env.EXPO_PUBLIC_URL_SHOPPING_LIST}/${id}`
         });
 
         if (response.statusCode === HttpStatusCode.NotFound)
