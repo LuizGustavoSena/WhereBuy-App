@@ -2,8 +2,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import Button from "@src/components/button";
 import Input from "@src/components/input";
 import { CustomPicker } from '@src/components/picker';
+import { CacheEnum } from '@src/domain/enums/cache-enum';
 import { TypeAmountEnum } from '@src/domain/models/shopping-list';
 import { CreateValidation } from "@src/domain/validations/shopping-list-validation";
+import { makeLocalStorageCacheClient } from '@src/main/fatories/local-storage-cache-client-factory';
+import { makeShoppingList } from '@src/main/fatories/shopping-list-factory';
 import { makeShoppingListValidation } from "@src/main/fatories/shopping-list-validation";
 import { useState } from "react";
 import { Controller, useForm } from 'react-hook-form';
@@ -11,29 +14,43 @@ import { Image, Pressable, Text, View } from "react-native";
 import Modal from "react-native-modal";
 
 const shoppingListValidation = makeShoppingListValidation();
+const shoppingListUseCase = makeShoppingList();
+const cacheUseCase = makeLocalStorageCacheClient();
 
 export default function ShoppingList() {
     const [addItem, setAddItem] = useState(false);
+    const [messageError, setMessageError] = useState<string | null>();
 
     const { control, handleSubmit, formState, reset } = useForm<CreateValidation>({
         resolver: zodResolver(shoppingListValidation.createSchema),
         mode: 'onChange'
     });
 
-    const closeAddItemModal = () => {
-        reset();
-        setAddItem(false);
-    }
-
-    const submitItem = async (data: CreateValidation) => {
-        closeAddItemModal();
-    }
-
     const options = [
         { label: "Gramas", value: TypeAmountEnum.GRAMS },
         { label: "Litros", value: TypeAmountEnum.LITERS },
         { label: "Unidades", value: TypeAmountEnum.UNIT },
     ];
+
+    const closeAddItemModal = () => {
+        reset();
+        setAddItem(false);
+    }
+
+    const submitItem = async ({ amount, name, typeAmount }: CreateValidation) => {
+        try {
+            const response = await shoppingListUseCase.create({
+                amount,
+                name,
+                typeAmount,
+                userId: cacheUseCase.readByKey(CacheEnum.AUTH_CACHE)
+            });
+        } catch (error: any) {
+            setMessageError(error.message);
+        } finally {
+            closeAddItemModal();
+        }
+    }
 
     return (
         <>
