@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import Button from "@src/components/button";
 import Input from "@src/components/input";
+import ModalError from '@src/components/modals/modal-error';
 import { CustomPicker } from '@src/components/picker';
 import { CacheEnum } from '@src/domain/enums/cache-enum';
 import { TypeAmountEnum } from '@src/domain/models/shopping-list';
@@ -37,12 +38,10 @@ export default function ShoppingList() {
         setAddItem(false);
     }
 
-    const submitItem = async ({ amount, name, typeAmount }: CreateValidation) => {
+    const submitItem = async (params: CreateValidation) => {
         try {
             const response = await shoppingListUseCase.create({
-                amount,
-                name,
-                typeAmount,
+                ...params,
                 userId: cacheUseCase.readByKey(CacheEnum.AUTH_CACHE)
             });
         } catch (error: any) {
@@ -90,6 +89,7 @@ export default function ShoppingList() {
                     </View>
                 </View>
             </Modal>
+            <ModalError show={!!messageError} message={messageError as string} setModal={setMessageError} />
             <View className="flex flex-row justify-around items-center h-[100px]">
                 <Pressable className="p-3 rounded-lg border-2 border-purple-300 w-[200px] flex items-center" onPress={() => { }}>
                     <Text>Gerar compras</Text>
