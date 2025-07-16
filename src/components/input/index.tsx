@@ -2,7 +2,7 @@ import { TextInput } from "react-native";
 
 type Props = {
     placeholder: string;
-    action(text: string | number): void;
+    action(text: any): void;
     value?: string | number;
     className?: string;
     secureTextEntry?: boolean;
