@@ -4,12 +4,12 @@ import Input from "@src/components/input";
 import ModalError from '@src/components/modals/modal-error';
 import { CustomPicker } from '@src/components/picker';
 import { CacheEnum } from '@src/domain/enums/cache-enum';
-import { TypeAmountEnum } from '@src/domain/models/shopping-list';
+import { GetAllShoppingListResult, TypeAmountEnum } from '@src/domain/models/shopping-list';
 import { CreateValidation } from "@src/domain/validations/shopping-list-validation";
 import { makeLocalStorageCacheClient } from '@src/main/fatories/local-storage-cache-client-factory';
 import { makeShoppingList } from '@src/main/fatories/shopping-list-factory';
 import { makeShoppingListValidation } from "@src/main/fatories/shopping-list-validation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from 'react-hook-form';
 import { Image, Pressable, Text, View } from "react-native";
 import Modal from "react-native-modal";
@@ -21,11 +21,26 @@ const cacheUseCase = makeLocalStorageCacheClient();
 export default function ShoppingList() {
     const [addItem, setAddItem] = useState(false);
     const [messageError, setMessageError] = useState<string | null>();
+    const [shoppingListItems, setShoppingListItems] = useState<GetAllShoppingListResult>([]);
 
     const { control, handleSubmit, formState, reset } = useForm<CreateValidation>({
         resolver: zodResolver(shoppingListValidation.createSchema),
         mode: 'onChange'
     });
+
+    useEffect(() => {
+        const getItems = async () => {
+            try {
+                const response = await shoppingListUseCase.getAll();
+
+                setShoppingListItems(response);
+            } catch (error: any) {
+                setMessageError(error.message);
+            }
+        };
+
+        getItems();
+    }, []);
 
     const options = [
         { label: "Gramas", value: TypeAmountEnum.GRAMS },
