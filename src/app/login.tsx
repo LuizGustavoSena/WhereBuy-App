@@ -1,5 +1,6 @@
 import Button from '@src/components/button';
 import Input from '@src/components/input';
+import Loading from '@src/components/loading';
 import ModalError from '@src/components/modals/modal-error';
 import ModalSuccess from '@src/components/modals/modal-success';
 import { CacheEnum } from '@src/domain/enums/cache-enum';
@@ -22,8 +23,12 @@ export default function Login() {
     const [tab, setTab] = useState<TabNavigation>(TabNavigation.SIGNIN);
     const [messageError, setMessageError] = useState<string | null>();
     const [messageSuccess, setMessageSuccess] = useState<string | null>();
+    const [loading, setLoading] = useState(false);
 
     const submitLogin = async () => {
+
+        // router.replace('shopping-list');
+
         if (!email || !pass) {
             setMessageError('Preencha as informações solicitadas');
 
@@ -31,6 +36,8 @@ export default function Login() {
         }
 
         try {
+            setLoading(true);
+
             authValidation.signin({
                 email,
                 password: pass
@@ -52,6 +59,8 @@ export default function Login() {
                 messageError = error.message;
 
             setMessageError(messageError);
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -63,6 +72,8 @@ export default function Login() {
         }
 
         try {
+            setLoading(true);
+
             authValidation.signup({
                 email,
                 password: pass,
@@ -83,6 +94,8 @@ export default function Login() {
                 messageError = error.message;
 
             setMessageError(messageError);
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -145,6 +158,7 @@ export default function Login() {
                             </>
                         )}
             </View>
+            <Loading show={loading} />
         </View>
     );
 }
