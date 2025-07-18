@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import Button from "@src/components/button";
 import Input from "@src/components/input";
+import Loading from '@src/components/loading';
 import ModalError from '@src/components/modals/modal-error';
 import { CustomPicker } from '@src/components/picker';
 import { CacheEnum } from '@src/domain/enums/cache-enum';
@@ -20,6 +21,7 @@ const cacheUseCase = makeLocalStorageCacheClient();
 
 export default function ShoppingList() {
     const [addItem, setAddItem] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [messageError, setMessageError] = useState<string | null>();
     const [shoppingListItems, setShoppingListItems] = useState<GetAllShoppingListResult>([]);
 
@@ -31,11 +33,15 @@ export default function ShoppingList() {
     useEffect(() => {
         const getItems = async () => {
             try {
+                setLoading(true);
+
                 const response = await shoppingListUseCase.getAll();
 
                 setShoppingListItems(response);
             } catch (error: any) {
                 setMessageError(error.message);
+            } finally {
+                setLoading(false);
             }
         };
 
@@ -55,6 +61,8 @@ export default function ShoppingList() {
 
     const submitItem = async (params: CreateValidation) => {
         try {
+            setLoading(true);
+
             const response = await shoppingListUseCase.create({
                 ...params,
                 userId: cacheUseCase.readByKey(CacheEnum.AUTH_CACHE)
@@ -63,6 +71,7 @@ export default function ShoppingList() {
             setMessageError(error.message);
         } finally {
             closeAddItemModal();
+            setLoading(false);
         }
     }
 
@@ -111,6 +120,7 @@ export default function ShoppingList() {
                 </Pressable>
                 <Button className="w-[50px] flex items-center" title="+" action={() => setAddItem(true)} />
             </View>
+            <Loading show={loading} />
         </>
     )
 }
