@@ -26,9 +26,6 @@ export default function Login() {
     const [loading, setLoading] = useState(false);
 
     const submitLogin = async () => {
-
-        // router.replace('shopping-list');
-
         if (!email || !pass) {
             setMessageError('Preencha as informações solicitadas');
 
