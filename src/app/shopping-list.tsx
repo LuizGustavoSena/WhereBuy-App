@@ -120,6 +120,12 @@ export default function ShoppingList() {
                 </Pressable>
                 <Button className="w-[50px] flex items-center" title="+" action={() => setAddItem(true)} />
             </View>
+            {shoppingListItems.length > 0 ? (
+                <>
+                </>
+            ) : (
+                <Text>Nenhum item encontrado</Text>
+            )}
             <Loading show={loading} />
         </>
     )
