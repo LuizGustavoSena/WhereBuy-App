@@ -121,10 +121,13 @@ export default function ShoppingList() {
                 <Button className="w-[50px] flex items-center" title="+" action={() => setAddItem(true)} />
             </View>
             {shoppingListItems.length > 0 ? (
-                <>
-                </>
+                <View className='flex items-center'>
+                </View>
             ) : (
-                <Text>Nenhum item encontrado</Text>
+                <View className='flex items-center justify-end h-[200px]'>
+                    <Text className='font-bold text-[24px]'>Nenhum item encontrado</Text>
+                    <Text className='mt-[15px]'>Do que precisa? Adicione em sua lista!</Text>
+                </View>
             )}
             <Loading show={loading} />
         </>
