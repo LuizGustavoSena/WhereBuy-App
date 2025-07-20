@@ -115,7 +115,7 @@ export default function ShoppingList() {
             </Modal>
             <ModalError show={!!messageError} message={messageError as string} setModal={setMessageError} />
             <View className="flex flex-row justify-around items-center h-[100px]">
-                <Pressable className="p-3 rounded-lg border-2 border-purple-300 w-[200px] flex items-center" onPress={() => { }}>
+                <Pressable className="p-3 rounded-lg border-2 border-gray-400 w-[200px] flex items-center" onPress={() => { }}>
                     <Text>Gerar compras</Text>
                 </Pressable>
                 <Button className="w-[50px] flex items-center" title="+" action={() => setAddItem(true)} />
