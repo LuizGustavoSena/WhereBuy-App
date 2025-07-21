@@ -10,6 +10,7 @@ import { CreateValidation } from "@src/domain/validations/shopping-list-validati
 import { makeLocalStorageCacheClient } from '@src/main/fatories/local-storage-cache-client-factory';
 import { makeShoppingList } from '@src/main/fatories/shopping-list-factory';
 import { makeShoppingListValidation } from "@src/main/fatories/shopping-list-validation";
+import moment from 'moment';
 import { useEffect, useState } from "react";
 import { Controller, useForm } from 'react-hook-form';
 import { Image, Pressable, Text, View } from "react-native";
@@ -35,7 +36,16 @@ export default function ShoppingList() {
             try {
                 setLoading(true);
 
-                const response = await shoppingListUseCase.getAll();
+                // const response = await shoppingListUseCase.getAll();
+                const response: GetAllShoppingListResult = [
+                    {
+                        amount: 5,
+                        created: moment().toDate(),
+                        id: '1',
+                        name: 'Banana nanica',
+                        typeAmount: TypeAmountEnum.UNIT
+                    }
+                ]
 
                 setShoppingListItems(response);
             } catch (error: any) {
@@ -122,6 +132,18 @@ export default function ShoppingList() {
             </View>
             {shoppingListItems.length > 0 ? (
                 <View className='flex items-center'>
+                    {shoppingListItems.map(el => (
+                        <View className='flex flex-row items-center p-5 w-full h-[80px]' key={el.id}>
+                            <View className='flex flex-row justify-around items-end w-[70%] bg-blue-200'>
+                                <Text className='text-[24px]'>{el.name}</Text>
+                                <Text className='text-[24px]'>{el.amount}</Text>
+                                <Text className='text-[16px]'>{el.typeAmount}</Text>
+                            </View>
+                            <View className='flex flex-row w-[30%] bg-red-200'>
+                            </View>
+
+                        </View>
+                    ))}
                 </View>
             ) : (
                 <View className='flex items-center justify-end h-[200px]'>
