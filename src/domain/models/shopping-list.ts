@@ -24,3 +24,9 @@ export enum TypeAmountEnum {
     GRAMS = 'grams',
     LITERS = 'liters'
 }
+
+export const TypeAmountView = {
+    [TypeAmountEnum.GRAMS]: 'gramas',
+    [TypeAmountEnum.LITERS]: 'litros',
+    [TypeAmountEnum.UNIT]: 'unidades',
+}
