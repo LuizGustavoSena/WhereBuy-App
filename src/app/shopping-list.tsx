@@ -5,7 +5,7 @@ import Loading from '@src/components/loading';
 import ModalError from '@src/components/modals/modal-error';
 import { CustomPicker } from '@src/components/picker';
 import { CacheEnum } from '@src/domain/enums/cache-enum';
-import { GetAllShoppingListResult, TypeAmountEnum } from '@src/domain/models/shopping-list';
+import { GetAllShoppingListResult, TypeAmountEnum, TypeAmountView } from '@src/domain/models/shopping-list';
 import { CreateValidation } from "@src/domain/validations/shopping-list-validation";
 import { makeLocalStorageCacheClient } from '@src/main/fatories/local-storage-cache-client-factory';
 import { makeShoppingList } from '@src/main/fatories/shopping-list-factory';
@@ -137,11 +137,10 @@ export default function ShoppingList() {
                             <View className='flex flex-row justify-around items-end w-[70%] bg-blue-200'>
                                 <Text className='text-[24px]'>{el.name}</Text>
                                 <Text className='text-[24px]'>{el.amount}</Text>
-                                <Text className='text-[16px]'>{el.typeAmount}</Text>
+                                <Text className='text-[16px]'>{TypeAmountView[el.typeAmount]}</Text>
                             </View>
                             <View className='flex flex-row w-[30%] bg-red-200'>
                             </View>
-
                         </View>
                     ))}
                 </View>
