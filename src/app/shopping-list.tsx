@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import Button from "@src/components/button";
+import ButtonIcon from '@src/components/button-icon';
 import Input from "@src/components/input";
 import Loading from '@src/components/loading';
 import ModalError from '@src/components/modals/modal-error';
@@ -44,6 +45,20 @@ export default function ShoppingList() {
                         id: '1',
                         name: 'Banana nanica',
                         typeAmount: TypeAmountEnum.UNIT
+                    },
+                    {
+                        amount: 150,
+                        created: moment().toDate(),
+                        id: '2',
+                        name: 'Mussarela',
+                        typeAmount: TypeAmountEnum.GRAMS
+                    },
+                    {
+                        amount: 3,
+                        created: moment().toDate(),
+                        id: '3',
+                        name: 'Leite desnatado',
+                        typeAmount: TypeAmountEnum.LITERS
                     }
                 ]
 
@@ -134,12 +149,14 @@ export default function ShoppingList() {
                 <View className='flex items-center'>
                     {shoppingListItems.map(el => (
                         <View className='flex flex-row items-center p-5 w-full h-[80px]' key={el.id}>
-                            <View className='flex flex-row justify-around items-end w-[70%] bg-blue-200'>
+                            <View className='flex flex-row justify-around items-end w-[70%]'>
                                 <Text className='text-[24px]'>{el.name}</Text>
                                 <Text className='text-[24px]'>{el.amount}</Text>
                                 <Text className='text-[16px]'>{TypeAmountView[el.typeAmount]}</Text>
                             </View>
-                            <View className='flex flex-row w-[30%] bg-red-200'>
+                            <View className='flex flex-row w-[30%] justify-around items-end'>
+                                <ButtonIcon src={require('../../assets/edit-icon.png')} action={() => { }} />
+                                <ButtonIcon src={require('../../assets/delete-icon.png')} action={() => { }} />
                             </View>
                         </View>
                     ))}
