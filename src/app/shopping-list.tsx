@@ -139,7 +139,7 @@ export default function ShoppingList() {
                 </View>
             </Modal>
             <ModalError show={!!messageError} message={messageError as string} setModal={setMessageError} />
-            <View className="flex flex-row justify-around items-center h-[100px]">
+            <View className="flex flex-row justify-around items-center h-[80px] bg-gray-200">
                 <Pressable className="p-3 rounded-lg border-2 border-gray-400 w-[200px] flex items-center" onPress={() => { }}>
                     <Text>Gerar compras</Text>
                 </Pressable>
@@ -147,12 +147,14 @@ export default function ShoppingList() {
             </View>
             {shoppingListItems.length > 0 ? (
                 <View className='flex items-center'>
-                    {shoppingListItems.map(el => (
-                        <View className='flex flex-row items-center p-5 w-full h-[80px]' key={el.id}>
-                            <View className='flex flex-row justify-around items-end w-[70%]'>
-                                <Text className='text-[24px]'>{el.name}</Text>
-                                <Text className='text-[24px]'>{el.amount}</Text>
-                                <Text className='text-[16px]'>{TypeAmountView[el.typeAmount]}</Text>
+                    {shoppingListItems.map((el, i) => (
+                        <View
+                            key={el.id}
+                            className={`flex flex-row items-center p-5 w-full h-[60px]`}
+                        >
+                            <View className='flex flex-row justify-between items-end w-[70%]'>
+                                <Text className='text-[20px]'>{el.name}</Text>
+                                <Text className='text-[16px]'>{el.amount} - {TypeAmountView[el.typeAmount]}</Text>
                             </View>
                             <View className='flex flex-row w-[30%] justify-around items-end'>
                                 <ButtonIcon src={require('../../assets/edit-icon.png')} action={() => { }} />
