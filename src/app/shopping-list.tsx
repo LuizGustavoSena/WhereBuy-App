@@ -1,10 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import Button from "@src/components/button";
 import ButtonIcon from '@src/components/button-icon';
-import Input from "@src/components/input";
 import Loading from '@src/components/loading';
+import ModalAddItem from '@src/components/modals/modal-add-item';
 import ModalError from '@src/components/modals/modal-error';
-import { CustomPicker } from '@src/components/picker';
 import { CacheEnum } from '@src/domain/enums/cache-enum';
 import { GetAllShoppingListResult, TypeAmountEnum, TypeAmountView } from '@src/domain/models/shopping-list';
 import { CreateValidation } from "@src/domain/validations/shopping-list-validation";
@@ -13,9 +12,8 @@ import { makeShoppingList } from '@src/main/fatories/shopping-list-factory';
 import { makeShoppingListValidation } from "@src/main/fatories/shopping-list-validation";
 import moment from 'moment';
 import { useEffect, useState } from "react";
-import { Controller, useForm } from 'react-hook-form';
-import { Image, Pressable, Text, View } from "react-native";
-import Modal from "react-native-modal";
+import { useForm } from 'react-hook-form';
+import { Pressable, Text, View } from "react-native";
 
 enum ModalItemEnum {
     ADD,
@@ -79,17 +77,6 @@ export default function ShoppingList() {
         getItems();
     }, []);
 
-    const options = [
-        { label: "Gramas", value: TypeAmountEnum.GRAMS },
-        { label: "Litros", value: TypeAmountEnum.LITERS },
-        { label: "Unidades", value: TypeAmountEnum.UNIT },
-    ];
-
-    const closeAddItemModal = () => {
-        reset();
-        setModal(null);
-    }
-
     const submitItem = async (params: CreateValidation) => {
         try {
             setLoading(true);
@@ -101,49 +88,13 @@ export default function ShoppingList() {
         } catch (error: any) {
             setMessageError(error.message);
         } finally {
-            closeAddItemModal();
             setLoading(false);
         }
     }
 
     return (
         <>
-            <Modal isVisible={modal === ModalItemEnum.ADD}>
-                <View className="flex justify-center items-center">
-                    <View className="flex justify-evenly items-end bg-white rounded-lg w-[300px] h-[250px] p-4">
-                        <View className="flex flex-row w-full justify-between">
-                            <Text className="text-lg font-bold">Adicionar item!</Text>
-                            <Pressable onPress={() => closeAddItemModal()}>
-                                <Image source={require('../../assets/close-icon.png')} />
-                            </Pressable>
-                        </View>
-                        <Controller control={control} name="name" render={({ field, fieldState }) =>
-                            <Input className="w-full" placeholder="Nome" value={field.value}
-                                action={field.onChange} errorMessage={fieldState.error?.message} />}
-                        />
-                        <View className="flex flex-row justify-between w-full">
-                            <Controller control={control} name="amount" render={({ field, fieldState }) =>
-                                <Input className="w-[80px]" placeholder="Quant" value={field.value}
-                                    action={field.onChange} errorMessage={fieldState.error?.message} />}
-                            />
-                            <Controller control={control} name="typeAmount" render={({ field, fieldState }) =>
-                                <CustomPicker
-                                    className="w-[160px]"
-                                    value={field.value}
-                                    onChange={field.onChange}
-                                    options={options}
-                                    placeholder="Tipo de quantidade"
-                                />
-                            }
-                            />
-                        </View>
-                        <View className="flex flex-row justify-between mt-5">
-                            <Button className="bg-transparent" title="Cancelar" action={() => closeAddItemModal()} />
-                            <Button title="Salvar" action={handleSubmit(async (data) => await submitItem(data))} disable={!formState.isValid} />
-                        </View>
-                    </View>
-                </View>
-            </Modal>
+            <ModalAddItem show={modal === ModalItemEnum.ADD} closeModal={() => setModal(null)} submit={submitItem} />
             <ModalError show={!!messageError} message={messageError as string} setModal={setMessageError} />
             <View className="flex flex-row justify-around items-center h-[80px] bg-gray-200">
                 <Pressable className="p-3 rounded-lg border-2 border-gray-400 w-[200px] flex items-center" onPress={() => { }}>
