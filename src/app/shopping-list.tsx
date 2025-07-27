@@ -17,12 +17,18 @@ import { Controller, useForm } from 'react-hook-form';
 import { Image, Pressable, Text, View } from "react-native";
 import Modal from "react-native-modal";
 
+enum ModalItemEnum {
+    ADD,
+    EDIT,
+    DELETE
+}
+
 const shoppingListValidation = makeShoppingListValidation();
 const shoppingListUseCase = makeShoppingList();
 const cacheUseCase = makeLocalStorageCacheClient();
 
 export default function ShoppingList() {
-    const [addItem, setAddItem] = useState(false);
+    const [modal, setModal] = useState<ModalItemEnum | null>(null);
     const [loading, setLoading] = useState(false);
     const [messageError, setMessageError] = useState<string | null>();
     const [shoppingListItems, setShoppingListItems] = useState<GetAllShoppingListResult>([]);
@@ -81,7 +87,7 @@ export default function ShoppingList() {
 
     const closeAddItemModal = () => {
         reset();
-        setAddItem(false);
+        setModal(null);
     }
 
     const submitItem = async (params: CreateValidation) => {
@@ -102,9 +108,9 @@ export default function ShoppingList() {
 
     return (
         <>
-            <Modal isVisible={addItem}>
+            <Modal isVisible={modal === ModalItemEnum.ADD}>
                 <View className="flex justify-center items-center">
-                    <View className="flex justify-evenly items-end bg-white rounded-lg w-[300px] h-[250px] border-t-[7px] border-purple-300 p-4">
+                    <View className="flex justify-evenly items-end bg-white rounded-lg w-[300px] h-[250px] p-4">
                         <View className="flex flex-row w-full justify-between">
                             <Text className="text-lg font-bold">Adicionar item!</Text>
                             <Pressable onPress={() => closeAddItemModal()}>
@@ -122,7 +128,7 @@ export default function ShoppingList() {
                             />
                             <Controller control={control} name="typeAmount" render={({ field, fieldState }) =>
                                 <CustomPicker
-                                    className="w-[160px] rounded-md mt-5 border border-purple-800"
+                                    className="w-[160px]"
                                     value={field.value}
                                     onChange={field.onChange}
                                     options={options}
@@ -143,7 +149,7 @@ export default function ShoppingList() {
                 <Pressable className="p-3 rounded-lg border-2 border-gray-400 w-[200px] flex items-center" onPress={() => { }}>
                     <Text>Gerar compras</Text>
                 </Pressable>
-                <Button className="w-[50px] flex items-center" title="+" action={() => setAddItem(true)} />
+                <Button className="w-[50px] flex items-center" title="+" action={() => setModal(ModalItemEnum.ADD)} />
             </View>
             {shoppingListItems.length > 0 ? (
                 <View className='flex items-center'>
