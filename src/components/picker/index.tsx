@@ -34,7 +34,7 @@ export function CustomPicker({
         options.find((option) => option.value === value)?.label ?? placeholder;
 
     return (
-        <View className={`${className}`}>
+        <View className={`rounded-md mt-5 border border-gray-500 ${className}`}>
             <Pressable
                 onPress={() => setModalVisible(true)}
                 className="border border-gray-300 rounded-lg px-4 py-3 bg-white justify-center"
