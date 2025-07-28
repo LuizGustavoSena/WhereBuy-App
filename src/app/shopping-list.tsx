@@ -1,18 +1,16 @@
-import { zodResolver } from '@hookform/resolvers/zod';
 import Button from "@src/components/button";
 import ButtonIcon from '@src/components/button-icon';
 import Loading from '@src/components/loading';
-import ModalAddItem from '@src/components/modals/modal-add-item';
+import ModalItem from '@src/components/modals/modal-add-item';
 import ModalError from '@src/components/modals/modal-error';
 import { CacheEnum } from '@src/domain/enums/cache-enum';
-import { GetAllShoppingListResult, TypeAmountEnum, TypeAmountView } from '@src/domain/models/shopping-list';
+import { GetAllShoppingListResult, TypeAmountEnum, TypeAmountView, UpdateShoppingListResult } from '@src/domain/models/shopping-list';
 import { CreateValidation } from "@src/domain/validations/shopping-list-validation";
 import { makeLocalStorageCacheClient } from '@src/main/fatories/local-storage-cache-client-factory';
 import { makeShoppingList } from '@src/main/fatories/shopping-list-factory';
 import { makeShoppingListValidation } from "@src/main/fatories/shopping-list-validation";
 import moment from 'moment';
 import { useEffect, useState } from "react";
-import { useForm } from 'react-hook-form';
 import { Pressable, Text, View } from "react-native";
 
 enum ModalItemEnum {
@@ -30,11 +28,7 @@ export default function ShoppingList() {
     const [loading, setLoading] = useState(false);
     const [messageError, setMessageError] = useState<string | null>();
     const [shoppingListItems, setShoppingListItems] = useState<GetAllShoppingListResult>([]);
-
-    const { control, handleSubmit, formState, reset } = useForm<CreateValidation>({
-        resolver: zodResolver(shoppingListValidation.createSchema),
-        mode: 'onChange'
-    });
+    const [item, setItem] = useState<UpdateShoppingListResult | undefined>();
 
     useEffect(() => {
         const getItems = async () => {
@@ -92,9 +86,15 @@ export default function ShoppingList() {
         }
     }
 
+    const editItemByItem = (item: UpdateShoppingListResult) => {
+        setItem(item);
+        setModal(ModalItemEnum.EDIT);
+    }
+
     return (
         <>
-            <ModalAddItem show={modal === ModalItemEnum.ADD} closeModal={() => setModal(null)} submit={submitItem} />
+            <ModalItem show={modal === ModalItemEnum.ADD} closeModal={() => setModal(null)} submit={submitItem} />
+            <ModalItem show={modal === ModalItemEnum.EDIT} closeModal={() => setModal(null)} submit={submitItem} values={item} />
             <ModalError show={!!messageError} message={messageError as string} setModal={setMessageError} />
             <View className="flex flex-row justify-around items-center h-[80px] bg-gray-200">
                 <Pressable className="p-3 rounded-lg border-2 border-gray-400 w-[200px] flex items-center" onPress={() => { }}>
@@ -114,7 +114,7 @@ export default function ShoppingList() {
                                 <Text className='text-[16px]'>{el.amount} - {TypeAmountView[el.typeAmount]}</Text>
                             </View>
                             <View className='flex flex-row w-[30%] justify-around items-end'>
-                                <ButtonIcon src={require('../../assets/edit-icon.png')} action={() => { }} />
+                                <ButtonIcon src={require('../../assets/edit-icon.png')} action={() => editItemByItem(el)} />
                                 <ButtonIcon src={require('../../assets/delete-icon.png')} action={() => { }} />
                             </View>
                         </View>
