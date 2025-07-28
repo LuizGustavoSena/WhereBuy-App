@@ -5,6 +5,7 @@ import { CustomPicker } from "@src/components/picker";
 import { TypeAmountEnum } from "@src/domain/models/shopping-list";
 import { CreateValidation } from "@src/domain/validations/shopping-list-validation";
 import { makeShoppingListValidation } from "@src/main/fatories/shopping-list-validation";
+import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Image, Pressable, Text, View } from "react-native";
 import Modal from "react-native-modal";
@@ -13,19 +14,28 @@ type Props = {
     show: boolean;
     closeModal(): void;
     submit(params: CreateValidation): Promise<void>;
+    values?: CreateValidation;
 }
 
 const shoppingListValidation = makeShoppingListValidation();
 
-export default function ModalAddItem({ show, closeModal, submit }: Props) {
+export default function ModalItem({ show, values, closeModal, submit }: Props) {
     const { control, handleSubmit, formState, reset } = useForm<CreateValidation>({
         resolver: zodResolver(shoppingListValidation.createSchema),
-        mode: 'onChange'
+        mode: 'onChange',
+        defaultValues: { ...values }
     });
 
-    const handleCancel = () => {
-        reset();
+    useEffect(() => {
+        if (values) {
+            reset(values);
+        } else {
+            reset();
+        }
+    }, [values, reset]);
 
+    const handleCancel = () => {
+        reset(values);
         closeModal();
     }
 
@@ -46,7 +56,7 @@ export default function ModalAddItem({ show, closeModal, submit }: Props) {
             <View className="flex justify-center items-center">
                 <View className="flex justify-evenly items-end bg-white rounded-lg w-[300px] h-[250px] p-4">
                     <View className="flex flex-row w-full justify-between">
-                        <Text className="text-lg font-bold">Adicionar item!</Text>
+                        <Text className="text-lg font-bold">{values ? 'Editar' : 'Adicionar'} item!</Text>
                         <Pressable onPress={() => handleCancel()}>
                             <Image source={require('../../../../assets/close-icon.png')} />
                         </Pressable>
