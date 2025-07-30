@@ -2,6 +2,7 @@ import Button from "@src/components/button";
 import ButtonIcon from '@src/components/button-icon';
 import Loading from '@src/components/loading';
 import ModalItem from '@src/components/modals/modal-add-item';
+import ModalDeleteItem from "@src/components/modals/modal-delete-item";
 import ModalError from '@src/components/modals/modal-error';
 import { CacheEnum } from '@src/domain/enums/cache-enum';
 import { GetAllShoppingListResult, TypeAmountEnum, TypeAmountView, UpdateShoppingListResult } from '@src/domain/models/shopping-list';
@@ -89,6 +90,11 @@ export default function ShoppingList() {
         setModal(ModalItemEnum.EDIT);
     }
 
+    const deleteItemByItem = (item: UpdateShoppingListResult) => {
+        setItem(item);
+        setModal(ModalItemEnum.DELETE);
+    }
+
     const submitEditItem = async (params: CreateValidation) => {
         try {
             setLoading(true);
@@ -114,6 +120,7 @@ export default function ShoppingList() {
         <>
             <ModalItem show={modal === ModalItemEnum.ADD} closeModal={() => setModal(null)} submit={submitItem} />
             <ModalItem show={modal === ModalItemEnum.EDIT} closeModal={() => setModal(null)} submit={submitEditItem} values={item} />
+            <ModalDeleteItem show={modal === ModalItemEnum.DELETE} itemName={item?.name || ''} closeModal={() => setModal(null)} submit={() => { }} />
             <ModalError show={!!messageError} message={messageError as string} setModal={setMessageError} />
             <View className="flex flex-row justify-around items-center h-[80px] bg-gray-200">
                 <Pressable className="p-3 rounded-lg border-2 border-gray-400 w-[200px] flex items-center" onPress={() => { }}>
@@ -134,7 +141,7 @@ export default function ShoppingList() {
                             </View>
                             <View className='flex flex-row w-[30%] justify-around items-end'>
                                 <ButtonIcon src={require('../../assets/edit-icon.png')} action={() => editItemByItem(el)} />
-                                <ButtonIcon src={require('../../assets/delete-icon.png')} action={() => { }} />
+                                <ButtonIcon src={require('../../assets/delete-icon.png')} action={() => deleteItemByItem(el)} />
                             </View>
                         </View>
                     ))}
