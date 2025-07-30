@@ -91,10 +91,14 @@ export default function ShoppingList() {
         setModal(ModalItemEnum.EDIT);
     }
 
+    const submitEditItem = async (params: CreateValidation) => {
+        console.log({ params })
+    }
+
     return (
         <>
             <ModalItem show={modal === ModalItemEnum.ADD} closeModal={() => setModal(null)} submit={submitItem} />
-            <ModalItem show={modal === ModalItemEnum.EDIT} closeModal={() => setModal(null)} submit={submitItem} values={item} />
+            <ModalItem show={modal === ModalItemEnum.EDIT} closeModal={() => setModal(null)} submit={submitEditItem} values={item} />
             <ModalError show={!!messageError} message={messageError as string} setModal={setMessageError} />
             <View className="flex flex-row justify-around items-center h-[80px] bg-gray-200">
                 <Pressable className="p-3 rounded-lg border-2 border-gray-400 w-[200px] flex items-center" onPress={() => { }}>
