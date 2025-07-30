@@ -8,7 +8,6 @@ import { GetAllShoppingListResult, TypeAmountEnum, TypeAmountView, UpdateShoppin
 import { CreateValidation } from "@src/domain/validations/shopping-list-validation";
 import { makeLocalStorageCacheClient } from '@src/main/fatories/local-storage-cache-client-factory';
 import { makeShoppingList } from '@src/main/fatories/shopping-list-factory';
-import { makeShoppingListValidation } from "@src/main/fatories/shopping-list-validation";
 import moment from 'moment';
 import { useEffect, useState } from "react";
 import { Pressable, Text, View } from "react-native";
@@ -19,7 +18,6 @@ enum ModalItemEnum {
     DELETE
 }
 
-const shoppingListValidation = makeShoppingListValidation();
 const shoppingListUseCase = makeShoppingList();
 const cacheUseCase = makeLocalStorageCacheClient();
 
@@ -92,7 +90,24 @@ export default function ShoppingList() {
     }
 
     const submitEditItem = async (params: CreateValidation) => {
-        console.log({ params })
+        try {
+            setLoading(true);
+
+            const response = await shoppingListUseCase.update({
+                id: item?.id ?? '',
+                data: params
+            });
+
+            var oldItem = shoppingListItems.find(el => el.id === response.id);
+            oldItem = { ...response };
+
+            setShoppingListItems(shoppingListItems);
+            setItem(undefined);
+        } catch (error: any) {
+            setMessageError(error.message);
+        } finally {
+            setLoading(false);
+        }
     }
 
     return (
