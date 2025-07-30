@@ -11,7 +11,7 @@ export default function ModalError({ show, message, setModal }: ModalErrorProps)
     return (
         <Modal isVisible={show}>
             <View className="flex justify-center items-center">
-                <View className="flex justify-evenly items-center bg-white rounded-lg items-center w-[300px] h-[250px] border-t-[7px] border-purple-300 p-4">
+                <View className="flex justify-evenly items-center bg-white rounded-lg items-center w-[300px] h-[250px] p-4">
                     <Image source={require('../../../../assets/error.png')} />
                     <Text className="text-lg font-bold">Erro ao executar ação!</Text>
                     <Text className="text-center">{message}</Text>
