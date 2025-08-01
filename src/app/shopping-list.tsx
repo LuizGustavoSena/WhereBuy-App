@@ -116,11 +116,26 @@ export default function ShoppingList() {
         }
     }
 
+    const submitDeleteItem = async () => {
+        try {
+            setLoading(true);
+
+            await shoppingListUseCase.deleteById(item?.id ?? '');
+
+            setShoppingListItems(shoppingListItems.filter(el => el.id !== item?.id));
+            setItem(undefined);
+        } catch (error: any) {
+            setMessageError(error.message);
+        } finally {
+            setLoading(false);
+        }
+    }
+
     return (
         <>
             <ModalItem show={modal === ModalItemEnum.ADD} closeModal={() => setModal(null)} submit={submitItem} />
             <ModalItem show={modal === ModalItemEnum.EDIT} closeModal={() => setModal(null)} submit={submitEditItem} values={item} />
-            <ModalDeleteItem show={modal === ModalItemEnum.DELETE} itemName={item?.name || ''} closeModal={() => setModal(null)} submit={() => { }} />
+            <ModalDeleteItem show={modal === ModalItemEnum.DELETE} itemName={item?.name || ''} closeModal={() => setModal(null)} submit={submitDeleteItem} />
             <ModalError show={!!messageError} message={messageError as string} setModal={setMessageError} />
             <View className="flex flex-row justify-around items-center h-[80px] bg-gray-200">
                 <Pressable className="p-3 rounded-lg border-2 border-gray-400 w-[200px] flex items-center" onPress={() => { }}>
