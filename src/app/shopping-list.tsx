@@ -95,7 +95,7 @@ export default function ShoppingList() {
         setModal(ModalItemEnum.DELETE);
     }
 
-    const submitEditItem = async (params: CreateValidation) => {
+    const editItem = async (params: CreateValidation) => {
         try {
             setLoading(true);
 
@@ -116,7 +116,7 @@ export default function ShoppingList() {
         }
     }
 
-    const submitDeleteItem = async () => {
+    const deleteItem = async () => {
         try {
             setLoading(true);
 
@@ -134,8 +134,8 @@ export default function ShoppingList() {
     return (
         <>
             <ModalItem show={modal === ModalItemEnum.ADD} closeModal={() => setModal(null)} submit={submitItem} />
-            <ModalItem show={modal === ModalItemEnum.EDIT} closeModal={() => setModal(null)} submit={submitEditItem} values={item} />
-            <ModalDeleteItem show={modal === ModalItemEnum.DELETE} itemName={item?.name || ''} closeModal={() => setModal(null)} submit={submitDeleteItem} />
+            <ModalItem show={modal === ModalItemEnum.EDIT} closeModal={() => setModal(null)} submit={editItem} values={item} />
+            <ModalDeleteItem show={modal === ModalItemEnum.DELETE} itemName={item?.name || ''} closeModal={() => setModal(null)} submit={deleteItem} />
             <ModalError show={!!messageError} message={messageError as string} setModal={setMessageError} />
             <View className="flex flex-row justify-around items-center h-[80px] bg-gray-200">
                 <Pressable className="p-3 rounded-lg border-2 border-gray-400 w-[200px] flex items-center" onPress={() => { }}>
