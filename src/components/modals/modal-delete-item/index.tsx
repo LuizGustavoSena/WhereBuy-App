@@ -26,7 +26,7 @@ export default function ModalDeleteItem({ show, itemName, closeModal, submit }: 
                     <View className="flex items-center">
                         <Image className="mb-[5px]" source={require('../../../../assets/warning-icon.png')} />
                         <Text className="text-lg font-bold text-center mb-[5px]">Tem certeza que deseja remover esse item?!</Text>
-                        <Text className="text-center">Ao confirmar solicitação será excluido permanentemente o item {itemName}</Text>
+                        <Text className="text-center">Ao confirmar, será excluido permanentemente o item {itemName}</Text>
                     </View>
                     <View className="flex flex-row justify-between mt-3">
                         <Button className="bg-transparent" title="Cancelar" action={() => handleCancel()} />
