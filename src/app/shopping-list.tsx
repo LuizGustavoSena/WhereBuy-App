@@ -133,6 +133,7 @@ export default function ShoppingList() {
 
     return (
         <>
+            <Loading show={loading} />
             <ModalItem show={modal === ModalItemEnum.ADD} closeModal={() => setModal(null)} submit={submitItem} />
             <ModalItem show={modal === ModalItemEnum.EDIT} closeModal={() => setModal(null)} submit={editItem} values={item} />
             <ModalDeleteItem show={modal === ModalItemEnum.DELETE} itemName={item?.name || ''} closeModal={() => setModal(null)} submit={deleteItem} />
@@ -167,7 +168,6 @@ export default function ShoppingList() {
                     <Text className='mt-[15px]'>Do que precisa? Adicione em sua lista!</Text>
                 </View>
             )}
-            <Loading show={loading} />
         </>
     )
 }
