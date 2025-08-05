@@ -9,9 +9,9 @@ import { GetAllShoppingListResult, TypeAmountEnum, TypeAmountView, UpdateShoppin
 import { CreateValidation } from "@src/domain/validations/shopping-list-validation";
 import { makeLocalStorageCacheClient } from '@src/main/fatories/local-storage-cache-client-factory';
 import { makeShoppingList } from '@src/main/fatories/shopping-list-factory';
-import moment from 'moment';
+import moment from "moment";
 import { useEffect, useState } from "react";
-import { Pressable, Text, View } from "react-native";
+import { Image, Pressable, Text, TextInput, View } from "react-native";
 
 enum ModalItemEnum {
     ADD,
@@ -138,11 +138,21 @@ export default function ShoppingList() {
             <ModalItem show={modal === ModalItemEnum.EDIT} closeModal={() => setModal(null)} submit={editItem} values={item} />
             <ModalDeleteItem show={modal === ModalItemEnum.DELETE} itemName={item?.name || ''} closeModal={() => setModal(null)} submit={deleteItem} />
             <ModalError show={!!messageError} message={messageError as string} setModal={setMessageError} />
-            <View className="flex flex-row justify-around items-center h-[80px] bg-gray-200">
-                <Pressable className="p-3 rounded-lg border-2 border-gray-400 w-[200px] flex items-center" onPress={() => { }}>
-                    <Text>Gerar compras</Text>
-                </Pressable>
-                <Button className="w-[50px] flex items-center" title="+" action={() => setModal(ModalItemEnum.ADD)} />
+            <View className="w-[330px] h-[100px] bg-gray-200 justify-around">
+                <View className="flex flex-row items-center border border-gray-500 rounded-[20px] p-2">
+                    <Image className="w-[20px] h-[20px]" source={require('../../assets/search-icon.png')} />
+                    <TextInput
+                        className={` `}
+                        onChangeText={(text: string) => { }}
+                        placeholder="Busca"
+                    />
+                </View>
+                <View className="flex flex-row justify-around items-center">
+                    <Pressable className="p-3 rounded-lg border-2 border-gray-400 w-[200px] flex items-center" onPress={() => { }}>
+                        <Text>Gerar compras</Text>
+                    </Pressable>
+                    <Button className="w-[50px] flex items-center" title="+" action={() => setModal(ModalItemEnum.ADD)} />
+                </View>
             </View>
             {shoppingListItems.length > 0 ? (
                 <View className='flex items-center'>
