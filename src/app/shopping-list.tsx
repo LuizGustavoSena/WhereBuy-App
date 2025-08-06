@@ -138,16 +138,16 @@ export default function ShoppingList() {
             <ModalItem show={modal === ModalItemEnum.EDIT} closeModal={() => setModal(null)} submit={editItem} values={item} />
             <ModalDeleteItem show={modal === ModalItemEnum.DELETE} itemName={item?.name || ''} closeModal={() => setModal(null)} submit={deleteItem} />
             <ModalError show={!!messageError} message={messageError as string} setModal={setMessageError} />
-            <View className="w-[330px] h-[100px] bg-gray-200 justify-around">
-                <View className="flex flex-row items-center border border-gray-500 rounded-[20px] p-2">
-                    <Image className="w-[20px] h-[20px]" source={require('../../assets/search-icon.png')} />
+            <View className="w-full bg-gray-200 justify-between py-[5px] px-[25px] h-[120px]">
+                <View className="flex flex-row items-center border border-gray-500 rounded-[20px] p">
+                    <Image className="w-[20px] h-[20px] ml-[5px]" source={require('../../assets/search-icon.png')} />
                     <TextInput
                         className={` `}
                         onChangeText={(text: string) => { }}
                         placeholder="Busca"
                     />
                 </View>
-                <View className="flex flex-row justify-around items-center">
+                <View className="flex flex-row justify-between items-center">
                     <Pressable className="p-3 rounded-lg border-2 border-gray-400 w-[200px] flex items-center" onPress={() => { }}>
                         <Text>Gerar compras</Text>
                     </Pressable>
