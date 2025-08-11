@@ -9,6 +9,7 @@ import { GetAllShoppingListResult, TypeAmountEnum, TypeAmountView, UpdateShoppin
 import { CreateValidation } from "@src/domain/validations/shopping-list-validation";
 import { makeLocalStorageCacheClient } from '@src/main/fatories/local-storage-cache-client-factory';
 import { makeShoppingList } from '@src/main/fatories/shopping-list-factory';
+import { useRouter } from 'expo-router';
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { Image, Pressable, Text, TextInput, View } from "react-native";
@@ -28,6 +29,7 @@ export default function ShoppingList() {
     const [messageError, setMessageError] = useState<string | null>();
     const [shoppingListItems, setShoppingListItems] = useState<GetAllShoppingListResult>([]);
     const [item, setItem] = useState<UpdateShoppingListResult | undefined>();
+    const router = useRouter();
 
     useEffect(() => {
         const getItems = async () => {
@@ -138,7 +140,13 @@ export default function ShoppingList() {
             <ModalItem show={modal === ModalItemEnum.EDIT} closeModal={() => setModal(null)} submit={editItem} values={item} />
             <ModalDeleteItem show={modal === ModalItemEnum.DELETE} itemName={item?.name || ''} closeModal={() => setModal(null)} submit={deleteItem} />
             <ModalError show={!!messageError} message={messageError as string} setModal={setMessageError} />
-            <View className="w-full bg-gray-200 justify-between py-[5px] px-[25px] h-[120px]">
+            <View className="w-full flex flex-row justify-between p-1 bg-gray-200">
+                <Text className="text-[20px] ml-[25px]">Where Buy</Text>
+                <Pressable onPress={() => router.navigate('/options')}>
+                    <Image className="w-[30px] h-[30px] ml-[5px]" source={require('../../assets/config-icon.png')} />
+                </Pressable>
+            </View>
+            <View className="w-full bg-gray-200 justify-between py-[5px] px-[25px] h-[110px]">
                 <View className="flex flex-row items-center border border-gray-500 rounded-[20px] p">
                     <Image className="w-[20px] h-[20px] ml-[5px]" source={require('../../assets/search-icon.png')} />
                     <TextInput
