@@ -5,6 +5,7 @@ export type SigninParams = {
 
 export type SigninResponse = {
     token: string;
+    refreshToken: string;
 }
 
 export type SignupParams = {
