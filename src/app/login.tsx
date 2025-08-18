@@ -3,16 +3,13 @@ import Input from '@src/components/input';
 import Loading from '@src/components/loading';
 import ModalError from '@src/components/modals/modal-error';
 import ModalSuccess from '@src/components/modals/modal-success';
-import { CacheEnum } from '@src/domain/enums/cache-enum';
 import { TabNavigation } from '@src/domain/enums/tab-navigation';
 import { InvalidCredentialsError } from '@src/domain/errors/invalid-credentials';
 import { makeAuth } from '@src/main/fatories/auth-factory';
 import { makeAuthValidation } from '@src/main/fatories/auth-validation';
-import { makeLocalStorageCacheClient } from '@src/main/fatories/local-storage-cache-client-factory';
 import React, { useState } from 'react';
 import { Keyboard, Pressable, Text, View } from "react-native";
 
-const cacheUseCase = makeLocalStorageCacheClient();
 const authUseCase = makeAuth();
 const authValidation = makeAuthValidation();
 
@@ -45,10 +42,6 @@ export default function Login() {
                 password: pass
             });
 
-            cacheUseCase.create({
-                key: CacheEnum.AUTH_CACHE,
-                value: response.token
-            });
         } catch (error) {
             var messageError = 'Erro ao efetuar login';
 
