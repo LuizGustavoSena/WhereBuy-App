@@ -5,6 +5,7 @@ import { ServerError } from "@src/domain/errors/server-error";
 import { makeSigninRequest, makeSigninResponse, makeSignupRequest } from "@test/domain/mocks/mock-auth";
 import { describe, expect, it } from "vitest";
 import { HttpClientSpy, makeHttpStatusCodeWithoutCreated } from "../mocks/mock-http";
+import { CacheClientSpy } from "../mocks/mock-local-storage";
 
 type Props = {
     sut: AuthUseCase;
@@ -13,7 +14,8 @@ type Props = {
 
 const makeSut = (): Props => {
     const httpClient = new HttpClientSpy();
-    const sut = new AuthUseCase(httpClient);
+    const cacheSpy = new CacheClientSpy();
+    const sut = new AuthUseCase(httpClient, cacheSpy);
 
     return {
         sut,
